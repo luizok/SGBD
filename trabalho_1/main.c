@@ -3,6 +3,7 @@
 
 #include "record.h"
 #include "page.h"
+#include "dbmanager.h"
 
 
 int main() {
@@ -21,4 +22,7 @@ int main() {
     print_page(page);
     printf(" ");
     printf("page is full -> %d\n", is_page_full(page));
+
+    DB_Manager_t* manager = new_dbmanager(5, 10);
+    print_dbmanager(manager);
 }
