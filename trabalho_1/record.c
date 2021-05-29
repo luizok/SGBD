@@ -13,4 +13,3 @@ void print_record(Record_t* record) {
 
     printf("data: %03u\n", record->data);
 }
-
