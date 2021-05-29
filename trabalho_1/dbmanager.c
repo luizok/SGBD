@@ -49,3 +49,19 @@ void print_dbmanager(DB_Manager_t* manager) {
 
     printf("\n");
 }
+
+void insert_record(Record_t* record) {
+
+}
+
+Record_t* search_record(Record_t* record) {
+
+}
+
+Record_t* remove_record(Record_t* record) {
+
+}
+
+void commit() {
+
+}
