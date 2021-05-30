@@ -11,7 +11,7 @@ int main() {
     Record_t* record = new_record(32);
     print_record(record);
 
-    Page_t* page = new_page(5, "records.txt");
+    Page_t* page = new_page(5, "records.txt", 0);
 
     page->bitmap = 0b1111111001;
     print_page(page);

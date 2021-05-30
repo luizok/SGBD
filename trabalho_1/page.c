@@ -1,7 +1,7 @@
 #include "page.h"
 
 
-Page_t* new_page(__uint32_t max_records, char* page_filename) {
+Page_t* new_page(__uint32_t max_records, char* page_filename, __uint32_t page_index) {
 
     Page_t* page = (Page_t*) malloc(PAGE_SIZE);
     page->prev_page = NULL;
@@ -9,6 +9,7 @@ Page_t* new_page(__uint32_t max_records, char* page_filename) {
     page->max_records = max_records;
     page->bitmap = ~0;
     page->records_file = NULL;
+    page->page_index = page_index;
 
     // page->records_file = fopen(page_filename, 'ab+');
 

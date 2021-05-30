@@ -15,11 +15,12 @@ typedef struct Page {
     __uint32_t max_records;
     FILE* records_file;
     __uint32_t bitmap;
+    __uint32_t page_index;
 } Page_t;
 
 #define PAGE_SIZE sizeof(Page_t)
 
-Page_t* new_page(__uint32_t n_records, char* page_filename);
+Page_t* new_page(__uint32_t n_records, char* page_filename, __uint32_t page_index);
 void print_page(Page_t* page);
 void insert_record_in_page(Page_t* page, Record_t* record);
 void search_record_in_page(Page_t* page, Record_t* record);

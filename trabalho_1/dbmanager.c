@@ -8,7 +8,7 @@ DB_Manager_t* new_dbmanager(__uint32_t n_pages, __uint32_t records_per_page) {
     manager->bitmaps = (__uint32_t**) malloc(n_pages * sizeof(__uint32_t*));
 
     for(__uint32_t i=0; i < n_pages; i++) {
-        manager->all_pages[i] = new_page(records_per_page, "FILENAME"); // passar i como parametro
+        manager->all_pages[i] = new_page(records_per_page, "FILENAME", i); // passar i como parametro
         manager->bitmaps[i] = &manager->all_pages[i]->bitmap;
     }
 
