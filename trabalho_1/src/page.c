@@ -8,6 +8,7 @@ Page_t* new_page(__uint32_t max_records, char* page_filename, __uint32_t page_in
     page->next_page = NULL;
     page->max_records = max_records;
     page->bitmap = 0;
+    strcpy(page->filename, page_filename);
     page->records_file = NULL;
     page->page_index = page_index;
 

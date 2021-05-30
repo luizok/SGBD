@@ -13,6 +13,7 @@ typedef struct Page {
     struct Page* prev_page;
     struct Page* next_page;
     __uint32_t max_records;
+    char filename[256];
     FILE* records_file;
     __uint32_t bitmap;
     __uint32_t page_index;
