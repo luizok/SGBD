@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "record.h"
-#include "page.h"
-#include "dbmanager.h"
+#include "src/record.h"
+#include "src/page.h"
+#include "src/dbmanager.h"
 
 
 int main() {

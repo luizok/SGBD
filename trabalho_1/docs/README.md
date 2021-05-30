@@ -29,7 +29,7 @@ O vetor _all_pages_ é um vetor contendo referência para todas as páginas inde
 ### Compilação e Execução
 
 ```bash
-gcc *.c -o main.exe
+gcc src/*.c *.c -o main.exe
 ./main.exe
 ```
 
