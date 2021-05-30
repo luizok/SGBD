@@ -21,8 +21,22 @@ int main() {
     page->bitmap = 0b11111;
     print_page(page);
     printf(" ");
-    printf("page is full -> %d\n", is_page_full(page));
+    printf("page is full -> %d\n\n", is_page_full(page));
 
-    DB_Manager_t* manager = new_dbmanager(5, 10);
+    int n_pages = 3, n_records = 2;
+    DB_Manager_t* manager = new_dbmanager(n_pages, n_records);
     print_dbmanager(manager);
+    printf("\n");
+
+    for(int i=0; i < n_pages*n_records; i++) {
+        printf("INSERCAO REGISTRO %d\n", i+1);
+        insert_record(manager, NULL);
+        print_dbmanager(manager);
+        printf("\n");
+    }
+
+    printf("INSERCAO REGISTRO %d\n", n_pages*n_records+1);
+    insert_record(manager, NULL);
+    print_dbmanager(manager);
+    printf("\n");
 }

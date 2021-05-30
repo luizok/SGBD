@@ -65,6 +65,14 @@ void print_page(Page_t* page) {
 
 void insert_record_in_page(Page_t* page, Record_t* record) {
     // inserir registro no arquivo da pagina
+    // TODO: Implementar funcionalidade real, ESTA MOCKADO
+
+    __int32_t empty_slot = next_empty_slot(page);
+
+    if(empty_slot < 0)
+        printf("ERRO: Nao ha slots disponiveis nessa pagina\n");
+
+    page->bitmap |= (0x1 << empty_slot);
 }
 
 void search_record_in_page(Page_t* page, Record_t* record) {

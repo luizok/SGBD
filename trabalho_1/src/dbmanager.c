@@ -29,7 +29,7 @@ void print_dbmanager(DB_Manager_t* manager) {
 
     Page_t* root = manager->empty_pages;
 
-    printf("Paginas vazias: \n");
+    printf("Paginas vazias: ");
     while(root) {
         print_page(root);
         printf(" -> ");
@@ -40,7 +40,7 @@ void print_dbmanager(DB_Manager_t* manager) {
 
     root = manager->used_pages;
 
-    printf("Paginas usadas: \n");
+    printf("Paginas usadas: ");
     while(root) {
         print_page(root);
         printf(" -> ");
@@ -52,6 +52,41 @@ void print_dbmanager(DB_Manager_t* manager) {
 
 void insert_record(DB_Manager_t* manager, Record_t* record) {
 
+    Page_t* last_non_null_page = NULL;
+    Page_t* curr_page = manager->used_pages;
+
+    while(curr_page) {
+        if(!is_page_full(curr_page)) {
+            insert_record_in_page(curr_page, record);
+            return;
+        }
+
+        last_non_null_page = curr_page;
+        curr_page = curr_page->next_page;
+    }
+
+    Page_t* empty_page = manager->empty_pages;
+
+    if(empty_page == NULL) { // Não há mais páginas vazias para utilizar
+        printf("ERRO: Nao ha mais espaco disponivel\n");
+        return;
+    }
+
+    if((curr_page == NULL) && (last_non_null_page == NULL)) { // Lista de usadas está vazia
+        manager->empty_pages = empty_page->next_page;
+        manager->empty_pages->prev_page = NULL;
+        empty_page->next_page = NULL;
+        manager->used_pages = empty_page;
+
+    } else if((curr_page == NULL) && (last_non_null_page != NULL)) { // Todas as páginas usadas estão cheias
+        manager->empty_pages = empty_page->next_page;
+        if(empty_page->next_page)
+            empty_page->next_page->prev_page = NULL;
+        empty_page->next_page = last_non_null_page->next_page;
+        last_non_null_page->next_page = empty_page;
+    }
+
+    insert_record_in_page(empty_page, record);
 }
 
 Record_t* search_record(DB_Manager_t* manager, Record_t* record) {
