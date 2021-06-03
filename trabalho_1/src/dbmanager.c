@@ -6,9 +6,11 @@ DB_Manager_t* new_dbmanager(__uint32_t n_pages, __uint32_t records_per_page) {
     DB_Manager_t* manager = (DB_Manager_t*) malloc(MANAGER_SIZE);
     manager->all_pages = (Page_t**) malloc(n_pages * sizeof(Page_t*));
     manager->bitmaps = (__uint32_t**) malloc(n_pages * sizeof(__uint32_t*));
+    char filename[256];
 
     for(__uint32_t i=0; i < n_pages; i++) {
-        manager->all_pages[i] = new_page(records_per_page, "FILENAME", i); // passar i como parametro
+        sprintf(filename, "page_id_%02d.dbpage", i);
+        manager->all_pages[i] = new_page(records_per_page, filename, i); // passar i como parametro
         manager->bitmaps[i] = &manager->all_pages[i]->bitmap;
     }
 
