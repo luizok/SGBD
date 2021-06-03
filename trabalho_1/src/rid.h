@@ -13,6 +13,7 @@ typedef struct Rid {
 #define RID_SIZE sizeof(Rid_t)
 
 Rid_t* new_rid();
+void print_rid(Rid_t* rid);
 
 
 #endif
