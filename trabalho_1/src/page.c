@@ -100,8 +100,24 @@ Rid_t* insert_record_in_page(Page_t* page, Record_t* record) {
     return rid;
 }
 
-void search_record_in_page(Page_t* page, Record_t* record) {
-    // buscar registro no arquivo da pagina
+Rid_t* search_record_in_page(Page_t* page, Record_t* record) {
+
+    BYTE* page_buffer = (BYTE*) malloc(page->max_records * RECORD_SIZE);
+    Rid_t* rid = NULL;
+
+    open_page_file(page);
+    fread(page_buffer, RECORD_SIZE, page->max_records, page->records_file);
+
+    // printf("AA\n");
+    for(__uint32_t i=0; i < page->max_records; i++)
+        if(memcmp(record, &page_buffer[i * RECORD_SIZE], RECORD_SIZE) == 0) {
+            rid = new_rid();
+            rid->slot = i;
+        }
+
+    fclose(page->records_file);
+
+    return rid;
 }
 
 void remove_record_in_page(Page_t* page, Record_t* record) {

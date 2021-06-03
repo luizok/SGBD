@@ -23,7 +23,7 @@ typedef struct DB_Manager {
 DB_Manager_t* new_dbmanager(__uint32_t n_pages, __uint32_t records_per_page);
 void print_dbmanager(DB_Manager_t* manager);
 Rid_t* insert_record(DB_Manager_t* manager, Record_t* record);
-Record_t* search_record(DB_Manager_t* manager, Record_t* record);
+Rid_t* search_record(DB_Manager_t* manager, Record_t* record);
 Record_t* remove_record(DB_Manager_t* manager, Record_t* record);
 void commit();
 

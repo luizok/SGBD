@@ -103,8 +103,23 @@ Rid_t* insert_record(DB_Manager_t* manager, Record_t* record) {
     return rid;
 }
 
-Record_t* search_record(DB_Manager_t* manager, Record_t* record) {
+Rid_t* search_record(DB_Manager_t* manager, Record_t* record) {
 
+    Page_t* root = manager->used_pages;
+    __int32_t  curr_page_index = -1;
+    Rid_t* rid = NULL;
+
+    while(root) {
+        curr_page_index++;
+        rid = search_record_in_page(root, record);
+        if(rid != NULL) {
+            rid->page = curr_page_index;
+            break;
+        }
+        root = root->next_page;
+    }
+
+    return rid;
 }
 
 Record_t* remove_record(DB_Manager_t* manager, Record_t* record) {
