@@ -1,6 +1,8 @@
 #include "page.h"
 
 
+void open_page_file(Page_t* page);
+
 Page_t* new_page(__uint32_t max_records, char* page_filename, __uint32_t page_index) {
 
     Page_t* page = (Page_t*) malloc(PAGE_SIZE);
@@ -12,9 +14,23 @@ Page_t* new_page(__uint32_t max_records, char* page_filename, __uint32_t page_in
     page->records_file = NULL;
     page->page_index = page_index;
 
-    // page->records_file = fopen(page_filename, 'ab+');
+    // open_page_file(page);
 
     return page;
+}
+
+void open_page_file(Page_t* page) {
+
+    __uint32_t page_size_in_bytes = page->max_records * RECORD_SIZE;
+    page->records_file = fopen(page->filename, "rb+");
+    BYTE* buffer = (BYTE*) calloc(1, page_size_in_bytes);
+
+    if(page->records_file == NULL) { // Se arquivo de página ainda não foi
+        page->records_file = fopen(page->filename, "wb+");
+        fwrite(buffer, page_size_in_bytes, 1, page->records_file);
+    }
+
+    rewind(page->records_file);
 }
 
 __uint32_t total_filled_slot(Page_t* page) {
@@ -50,7 +66,6 @@ void reorder_page(Page_t* page) {
     // mover último registro da página para slot desocupapdo
 }
 
-
 void print_page(Page_t* page) {
     // loop em todos os registros da pagina
     if(page == NULL)
@@ -63,16 +78,26 @@ void print_page(Page_t* page) {
     }
 }
 
-void insert_record_in_page(Page_t* page, Record_t* record) {
-    // inserir registro no arquivo da pagina
-    // TODO: Implementar funcionalidade real, ESTA MOCKADO
+Rid_t* insert_record_in_page(Page_t* page, Record_t* record) {
 
     __int32_t empty_slot = next_empty_slot(page);
 
-    if(empty_slot < 0)
+    if(empty_slot < 0) {
         printf("ERRO: Nao ha slots disponiveis nessa pagina\n");
+        return NULL;
+    }
+
+    Rid_t* rid = new_rid();
+    rid->slot = empty_slot;
+
+    open_page_file(page);
+    fseek(page->records_file, empty_slot * RECORD_SIZE, SEEK_SET);
+    fwrite(record, RECORD_SIZE, 1, page->records_file);
+    fclose(page->records_file);
 
     page->bitmap |= (0x1 << empty_slot);
+
+    return rid;
 }
 
 void search_record_in_page(Page_t* page, Record_t* record) {

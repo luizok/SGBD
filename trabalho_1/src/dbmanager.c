@@ -52,43 +52,55 @@ void print_dbmanager(DB_Manager_t* manager) {
     printf("\n");
 }
 
-void insert_record(DB_Manager_t* manager, Record_t* record) {
+Rid_t* insert_record(DB_Manager_t* manager, Record_t* record) {
 
     Page_t* last_non_null_page = NULL;
     Page_t* curr_page = manager->used_pages;
+    __int32_t curr_page_index = -1;
+    Rid_t* rid = NULL;
+    BOOL has_inserted = FALSE;
 
     while(curr_page) {
+        curr_page_index++;
         if(!is_page_full(curr_page)) {
-            insert_record_in_page(curr_page, record);
-            return;
+            rid = insert_record_in_page(curr_page, record);
+            has_inserted = TRUE;
         }
 
         last_non_null_page = curr_page;
         curr_page = curr_page->next_page;
     }
 
-    Page_t* empty_page = manager->empty_pages;
+    if(!has_inserted) {
+        Page_t* empty_page = manager->empty_pages;
 
-    if(empty_page == NULL) { // Não há mais páginas vazias para utilizar
-        printf("ERRO: Nao ha mais espaco disponivel\n");
-        return;
+        if(empty_page == NULL) { // Não há mais páginas vazias para utilizar
+            printf("ERRO: Nao ha mais espaco disponivel\n");
+            return NULL;
+        }
+
+        if((curr_page == NULL) && (last_non_null_page == NULL)) { // Lista de usadas está vazia
+            manager->empty_pages = empty_page->next_page;
+            manager->empty_pages->prev_page = NULL;
+            empty_page->next_page = NULL;
+            manager->used_pages = empty_page;
+
+        } else if((curr_page == NULL) && (last_non_null_page != NULL)) { // Todas as páginas usadas estão cheias
+            manager->empty_pages = empty_page->next_page;
+            if(empty_page->next_page)
+                empty_page->next_page->prev_page = NULL;
+            empty_page->next_page = last_non_null_page->next_page;
+            last_non_null_page->next_page = empty_page;
+        }
+
+        empty_page;
+        curr_page_index++;
+        rid = insert_record_in_page(empty_page, record);
     }
 
-    if((curr_page == NULL) && (last_non_null_page == NULL)) { // Lista de usadas está vazia
-        manager->empty_pages = empty_page->next_page;
-        manager->empty_pages->prev_page = NULL;
-        empty_page->next_page = NULL;
-        manager->used_pages = empty_page;
+    rid->page = curr_page_index;
 
-    } else if((curr_page == NULL) && (last_non_null_page != NULL)) { // Todas as páginas usadas estão cheias
-        manager->empty_pages = empty_page->next_page;
-        if(empty_page->next_page)
-            empty_page->next_page->prev_page = NULL;
-        empty_page->next_page = last_non_null_page->next_page;
-        last_non_null_page->next_page = empty_page;
-    }
-
-    insert_record_in_page(empty_page, record);
+    return rid;
 }
 
 Record_t* search_record(DB_Manager_t* manager, Record_t* record) {
