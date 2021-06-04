@@ -100,6 +100,19 @@ Rid_t* insert_record_in_page(Page_t* page, Record_t* record) {
     return rid;
 }
 
+Record_t* get_records_in_page(Page_t* page){//como retornar os registros ?
+    BYTE* page_buffer = (BYTE*) malloc(page->max_records * RECORD_SIZE);
+    open_page_file(page);
+    fread(page_buffer, RECORD_SIZE, page->max_records, page->records_file);
+    
+    /*
+    printf("| ");
+        for(__uint32_t i=0; i < page->max_records; i++)
+            printf("%d", (page->bitmap >> i) & 0x1);
+    printf(" |");
+    */
+}
+
 Rid_t* search_record_in_page(Page_t* page, Record_t* record) {
 
     BYTE* page_buffer = (BYTE*) malloc(page->max_records * RECORD_SIZE);
