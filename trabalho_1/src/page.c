@@ -105,6 +105,9 @@ Record_t* get_records_in_page(Page_t* page){//como retornar os registros ?
     open_page_file(page);
     fread(page_buffer, RECORD_SIZE, page->max_records, page->records_file);
     
+    for(__uint32_t i=0; i < page->max_records; i++){
+
+    }
     /*
     printf("| ");
         for(__uint32_t i=0; i < page->max_records; i++)

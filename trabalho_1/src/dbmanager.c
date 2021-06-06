@@ -103,6 +103,19 @@ Rid_t* insert_record(DB_Manager_t* manager, Record_t* record) {
     return rid;
 }
 
+Record_t** get_records_in_pages(DB_Manager_t* manager){
+    Page_t* root = manager->used_pages;
+    Record_t* record = (Record_t*) malloc(RECORD_SIZE);
+    Record_t** vector = (Record_t*) malloc(RECORD_SIZE);//qual seria o tamanho aqui ?
+
+    while(root) {
+        get_records_in_pages(record);
+        //adicionar no 'vetor'
+        printf(" -> ");
+        root = root->next_page;
+    }
+}
+
 Rid_t* search_record(DB_Manager_t* manager, Record_t* record) {
 
     Page_t* root = manager->used_pages;
