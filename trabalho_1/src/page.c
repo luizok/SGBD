@@ -114,6 +114,8 @@ Record_t* get_records_in_page(Page_t* page){//como retornar os registros ?
             printf("%d", (page->bitmap >> i) & 0x1);
     printf(" |");
     */
+   fclose(page->records_file);
+   //return;
 }
 
 Rid_t* search_record_in_page(Page_t* page, Record_t* record) {
