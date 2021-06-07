@@ -51,4 +51,8 @@ int main(int argc, char** argv) {
 
         printf("\n");
     }
+    printf("Scanzin top: \n");
+    Record_t*** records = get_records_in_pages(manager);
+
+
 }
