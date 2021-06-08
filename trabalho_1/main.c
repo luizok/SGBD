@@ -53,6 +53,10 @@ int main(int argc, char** argv) {
     }
     printf("Scanzin top: \n");
     Record_t*** records = get_records_in_pages(manager);
+    Record_t*** curr_page = records;
 
+    for(curr_page; *curr_page != NULL; curr_page++)
+        for(Record_t** curr_record = *curr_page; *curr_record != NULL; curr_record++)
+            print_record(*curr_record);
 
 }

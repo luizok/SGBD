@@ -103,7 +103,7 @@ Rid_t* insert_record_in_page(Page_t* page, Record_t* record) {
 Record_t** get_records_in_page(Page_t* page){
     __uint32_t records_in_page = total_filled_slot(page);
     BYTE* page_buffer = (BYTE*) malloc(records_in_page * RECORD_SIZE);//copiando bytes dos arquivos
-    Record_t** record_vector = (Record_t**) malloc(sizeof(Record_t*) * records_in_page);//vetor 
+    Record_t** record_vector = (Record_t**) malloc(sizeof(Record_t*) * (records_in_page + 1)); // + 1 significa slot extra no final apontando para NULL
 
     open_page_file(page);
     fread(page_buffer, RECORD_SIZE, records_in_page, page->records_file);
@@ -111,8 +111,11 @@ Record_t** get_records_in_page(Page_t* page){
     for(__uint32_t i=0; i < records_in_page; i++){
         record_vector[i] = (Record_t*) &page_buffer[i*RECORD_SIZE]; 
     }
-   fclose(page->records_file);
-   return record_vector;
+
+    record_vector[records_in_page] = NULL;
+
+    fclose(page->records_file);
+    return record_vector;
 }
 
 Rid_t* search_record_in_page(Page_t* page, Record_t* record) {

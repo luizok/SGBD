@@ -109,18 +109,18 @@ Record_t*** get_records_in_pages(DB_Manager_t* manager){
 
     while(root) {
         used_pages_number++;
-        //adicionar no 'vetor'
-        printf(" -> ");
         root = root->next_page;
     }
-    Record_t*** vector = (Record_t***) malloc(used_pages_number * sizeof(Record_t**));//qual seria o tamanho aqui ?
+    Record_t*** vector = (Record_t***) malloc((used_pages_number + 1) * sizeof(Record_t**));//qual seria o tamanho aqui ?
     root = manager->used_pages;
     for (__uint32_t i=0; i < used_pages_number; i++)
     {
         vector[i] = get_records_in_page(root);
         root = root->next_page;
     }
-    
+
+    vector[used_pages_number] = NULL;
+
     return vector;
 }
 
