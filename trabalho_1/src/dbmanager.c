@@ -93,7 +93,6 @@ Rid_t* insert_record(DB_Manager_t* manager, Record_t* record) {
             last_non_null_page->next_page = empty_page;
         }
 
-        empty_page;
         curr_page_index++;
         rid = insert_record_in_page(empty_page, record);
     }
@@ -103,7 +102,7 @@ Rid_t* insert_record(DB_Manager_t* manager, Record_t* record) {
     return rid;
 }
 
-Record_t*** get_records_in_pages(DB_Manager_t* manager){
+Record_t*** get_all_records(DB_Manager_t* manager){
     Page_t* root = manager->used_pages;
     __uint32_t used_pages_number = 0;
 

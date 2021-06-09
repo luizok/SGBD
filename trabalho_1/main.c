@@ -58,7 +58,7 @@ void test_search(DB_Manager_t* manager) {
 void test_scan(DB_Manager_t* manager) {
 
     printf("Scanzin top: \n");
-    Record_t*** records = get_records_in_pages(manager);
+    Record_t*** records = get_all_records(manager);
     Record_t*** curr_page = records;
 
     for(curr_page; *curr_page != NULL; curr_page++)
