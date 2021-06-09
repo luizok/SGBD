@@ -138,8 +138,10 @@ Rid_t* search_record_in_page(Page_t* page, Record_t* record) {
     return rid;
 }
 
-void remove_record_in_page(Page_t* page, Record_t* record) {
+void remove_record_in_page(Page_t* page, __uint32_t slot) {
     // remover registro no arquivo da pagina
+    page->bitmap &= ~(0x1 << slot);
+
 }
 
 BOOL is_page_full(Page_t* page) {
@@ -149,4 +151,9 @@ BOOL is_page_full(Page_t* page) {
             return FALSE;
 
     return TRUE;
+}
+
+BOOL is_page_empty(Page_t* page) {
+
+    return page->bitmap == 0;
 }

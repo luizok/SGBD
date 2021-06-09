@@ -66,9 +66,44 @@ void test_scan(DB_Manager_t* manager) {
             print_record(*curr_record);
 }
 
+__uint32_t* numbers_to_remove(__uint32_t n_records) {
+
+    __uint32_t n_removes = 3 * n_records;
+    __uint32_t* to_remove = malloc(n_removes * sizeof(__uint32_t));
+
+    for(int i=0; i < n_records; i++)
+        to_remove[i] = 2 * (n_records + i);
+
+    for(int i=0; i < n_records; i++)
+        to_remove[n_records+i] = 2 * i;
+
+    for(int i=0; i < n_records; i++)
+        to_remove[2*n_records+i] = 2 * (4*n_records - i);
+
+    return to_remove;
+}
+
 void test_delete(DB_Manager_t* manager) {
 
     printf("\nDelecaozinha top: \n");
+    __uint32_t n_pages = manager->n_pages;
+    __uint32_t n_records = manager->all_pages[0]->max_records;
+    __uint32_t* to_remove = numbers_to_remove(n_records);
+    Record_t* record = NULL;
+
+    for(int i=0; i < 3*n_records; i++) {
+        // printf("to_remove[%d] = %d", i, to_remove[i]);
+        record = remove_record(manager, new_record(to_remove[i]));
+        if(record) {
+            printf("%d REMOVED \n", to_remove[i]);
+            print_dbmanager(manager);
+        } else
+            printf("%d NOT FOUND\n", to_remove[i]);
+
+        printf("\n");
+    }
+
+    printf("\n");
 }
 
 int main(int argc, char** argv) {

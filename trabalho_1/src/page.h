@@ -26,8 +26,9 @@ Page_t* new_page(__uint32_t n_records, char* page_filename, __uint32_t page_inde
 void print_page(Page_t* page);
 Rid_t* insert_record_in_page(Page_t* page, Record_t* record);
 Rid_t* search_record_in_page(Page_t* page, Record_t* record);
-void remove_record_in_page(Page_t* page, Record_t* record);
+void remove_record_in_page(Page_t* page, __uint32_t slot);
 BOOL is_page_full(Page_t* page);
+BOOL is_page_empty(Page_t* page);
 Record_t** get_records_in_page(Page_t* page);
 
 
