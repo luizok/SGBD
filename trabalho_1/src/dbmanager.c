@@ -89,6 +89,7 @@ Rid_t* insert_record(DB_Manager_t* manager, Record_t* record) {
             manager->empty_pages = empty_page->next_page;
             if(empty_page->next_page)
                 empty_page->next_page->prev_page = NULL;
+            empty_page->prev_page = last_non_null_page;
             empty_page->next_page = last_non_null_page->next_page;
             last_non_null_page->next_page = empty_page;
         }
