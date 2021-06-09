@@ -106,6 +106,16 @@ void test_delete(DB_Manager_t* manager) {
     printf("\n");
 }
 
+void test_remove_all(DB_Manager_t* manager) {
+
+    Record_t*** records = get_all_records(manager);
+    Record_t*** curr_page = records;
+
+    for(curr_page; *curr_page != NULL; curr_page++)
+        for(Record_t** curr_record = *curr_page; *curr_record != NULL; curr_record++)
+            remove_record(manager, *curr_record);
+}
+
 int main(int argc, char** argv) {
 
     if(argc < 3) {
@@ -125,6 +135,11 @@ int main(int argc, char** argv) {
     test_search(manager);
     test_scan(manager);
     test_delete(manager);
+    test_scan(manager);
+    test_remove_all(manager);
+
+    print_dbmanager(manager);
+    printf("\n");
 
     return 0;
 }

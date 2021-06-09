@@ -143,6 +143,25 @@ Rid_t* search_record(DB_Manager_t* manager, Record_t* record) {
     return rid;
 }
 
+void move_page_to_empty_pages(DB_Manager_t* manager, Page_t* page) {
+
+    if(page->prev_page) // se não for o primeiro elemento da used_pages
+        page->prev_page->next_page = page->next_page;
+    else
+        manager->used_pages = page->next_page;
+
+    if(page->next_page)
+        page->next_page->prev_page = page->prev_page;
+
+    page->prev_page = NULL;
+    page->next_page = manager->empty_pages;
+
+    if(manager->empty_pages)
+        manager->empty_pages->prev_page = page;
+
+    manager->empty_pages = page;
+}
+
 Record_t* remove_record(DB_Manager_t* manager, Record_t* record) {
 
     Page_t* root = manager->used_pages;
@@ -152,28 +171,9 @@ Record_t* remove_record(DB_Manager_t* manager, Record_t* record) {
         rid = search_record_in_page(root, record);
         if(rid) {
             remove_record_in_page(root, rid->slot);
-            
-            printf("prev = %p\n", root->prev_page);
-            printf("root = %p\n", root);
-            printf("next = %p\n", root->next_page);
-            if(is_page_empty(root)) {
 
-                
-
-                if(root->prev_page)
-                    root->prev_page->next_page = root->next_page;
-
-                if(root->next_page)
-                    root->next_page->prev_page = root->prev_page;
-
-                // root->prev_page = NULL;
-                // root->next_page = manager->empty_pages;
-
-                // if(manager->empty_pages)
-                //     manager->empty_pages->prev_page = root;
-
-                // manager->empty_pages = root;
-            }
+            if(is_page_empty(root))
+                move_page_to_empty_pages(manager, root);
 
             return record;
         }
