@@ -225,11 +225,14 @@ Record_t* remove_record(DB_Manager_t* manager, Record_t* record) {
             printf("last page: ");
             print_page(last_used_page);
             printf("\nlast slot: %d\n", last_rid->slot);
-            remove_record_in_page(last_used_page, last_rid->slot);
-            rid = insert_record(manager, last_record);
-            printf("INSERT AT ");
-            print_rid(rid);
-            printf("\n");
+
+            if(last_rid->slot >= 0) {
+                remove_record_in_page(last_used_page, last_rid->slot);
+                rid = insert_record(manager, last_record);
+                printf("INSERT AT ");
+                print_rid(rid);
+                printf("\n");
+            }
 
             if(is_page_empty(last_used_page))
                 move_page_to_empty_pages(manager, last_used_page);
