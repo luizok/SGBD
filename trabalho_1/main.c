@@ -130,15 +130,100 @@ int main(int argc, char** argv) {
     printf("Estadozin inicial: \n");
     print_dbmanager(manager);
     printf("\n");
+    int escolha=1;
+    while (escolha != 7)
+    {
 
-    test_insert(manager);
-    test_search(manager);
-    test_scan(manager);
-    test_delete(manager);
-    test_scan(manager);
-    test_remove_all(manager);
+        printf("\n\n ----------------------- ");
 
-    print_dbmanager(manager);
+        printf("\n    MENU - DB MANAGER ");
+        printf("\n ----------------------- ");
+        printf("\n Digite 1 para Insercao ");
+        printf("\n Digite 2 para Exclusao ");
+        printf("\n Digite 3 para Exclusao de todos os registros ");
+        printf("\n Digite 4 para Busca ");
+        printf("\n Digite 5 para Scan ");
+        printf("\n Digite 6 para ver status do DB Manager ");
+        printf("\n Digite 7 para Fechar Programa ");
+        printf("\n\n Escolha uma opcao: ");
+        scanf("%d", &escolha);
+        switch (escolha) {
+
+            case 1:
+            {
+
+                printf("\n\n Opcao escolhida: 1 \n");
+                test_insert(manager);
+                printf("\n\n");
+                break;
+            }
+
+            case 2:
+            {
+
+                printf("\n\n Opcao escolhida: 2 ");
+                test_delete(manager);
+                printf("\n\n");
+                break;
+            }
+
+            case 3:
+            {
+                
+                printf("\n\n Opcao escolhida: 3 \n");
+                test_remove_all(manager);
+                print_dbmanager(manager);
+                printf("\n");    
+                break;
+            }
+            
+            case 4:
+            {
+                
+                printf("\n\n Opcao escolhida: 4 \n");
+                test_search(manager);
+                printf("\n");    
+                break;
+            }
+
+            case 5:
+            {
+                
+                printf("\n\n Opcao escolhida: 5 \n");
+                test_scan(manager);
+                printf("\n");    
+                break;
+            }
+            case 6:
+            {
+                
+                printf("\n\n Opcao escolhida: 6 \n");
+                print_dbmanager(manager);
+                printf("\n");
+                break;
+                
+            }
+
+            // opção padrão
+            default:
+            {
+
+                // continue pula o while  
+                if(escolha == 7)
+                {   
+                    continue;
+                }
+                printf("\n\n Opcao invalida! ");
+                break;
+            }
+
+        }
+
+    }
+    if(escolha == 7)
+        printf("\n\n Programa finalizado ;D\n");
+
+
     printf("\n");
 
     return 0;
