@@ -65,6 +65,7 @@ Rid_t* insert_record(DB_Manager_t* manager, Record_t* record) {
         if(!is_page_full(curr_page)) {
             rid = insert_record_in_page(curr_page, record);
             has_inserted = TRUE;
+            break;
         }
 
         last_non_null_page = curr_page;
@@ -162,15 +163,82 @@ void move_page_to_empty_pages(DB_Manager_t* manager, Page_t* page) {
     manager->empty_pages = page;
 }
 
+Page_t* get_last_used_page(DB_Manager_t* manager) {
+
+    Page_t* curr_page = manager->used_pages;
+    Page_t* last_page = NULL;
+
+    while(curr_page) {
+        last_page = curr_page;
+        curr_page = curr_page->next_page;
+    }
+
+    return last_page;
+}
+
+Rid_t* get_last_record_rid(DB_Manager_t* manager) {
+
+    Record_t** records = NULL;
+    Page_t* root = get_last_used_page(manager);
+    Rid_t* rid = new_rid();
+    rid->slot = 0;
+
+    records = get_records_in_page(root);
+    Record_t** last_record;
+    for(last_record = records; *(last_record+1) != NULL; last_record++)
+        rid->slot++;
+
+    return rid;
+}
+
+Record_t* get_last_record(DB_Manager_t* manager) {
+
+    Record_t** records = NULL;
+    Page_t* root = get_last_used_page(manager);
+
+    records = get_records_in_page(root);
+    Record_t** last_record;
+    for(last_record = records; *(last_record+1) != NULL; last_record++)
+        continue;
+
+    return *last_record;
+}
+
 Record_t* remove_record(DB_Manager_t* manager, Record_t* record) {
 
     Page_t* root = manager->used_pages;
     Rid_t* rid = NULL;
 
+    Page_t* last_used_page = NULL;
+    Rid_t* last_rid = NULL;
+    Record_t* last_record = NULL;
+
+    __uint32_t page_index = -1;
     while(root) {
         rid = search_record_in_page(root, record);
+        page_index++;
         if(rid) {
+            rid->page = page_index;
             remove_record_in_page(root, rid->slot);
+
+            printf("\nITERATION\n");
+            print_dbmanager(manager);
+
+            last_rid = get_last_record_rid(manager);
+            last_used_page = get_last_used_page(manager);
+            last_record = get_last_record(manager);
+
+            printf("last page: ");
+            print_page(last_used_page);
+            printf("\nlast slot: %d\n", last_rid->slot);
+            remove_record_in_page(last_used_page, last_rid->slot);
+            rid = insert_record(manager, last_record);
+            printf("INSERT AT ");
+            print_rid(rid);
+            printf("\n");
+
+            if(is_page_empty(last_used_page))
+                move_page_to_empty_pages(manager, last_used_page);
 
             if(is_page_empty(root))
                 move_page_to_empty_pages(manager, root);

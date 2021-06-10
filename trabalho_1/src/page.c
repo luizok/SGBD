@@ -71,10 +71,10 @@ void print_page(Page_t* page) {
     if(page == NULL)
         printf("X");
     else {
-        printf("| ");
+        printf("{%02d: ", page->page_index);
         for(__uint32_t i=0; i < page->max_records; i++)
             printf("%d", (page->bitmap >> i) & 0x1);
-        printf(" |");
+        printf(" }");
     }
 }
 
@@ -128,7 +128,7 @@ Rid_t* search_record_in_page(Page_t* page, Record_t* record) {
 
     // printf("AA\n");
     for(__uint32_t i=0; i < page->max_records; i++)
-        if(memcmp(record, &page_buffer[i * RECORD_SIZE], RECORD_SIZE) == 0) {
+        if((memcmp(record, &page_buffer[i * RECORD_SIZE], RECORD_SIZE) == 0) && (((page->bitmap >> i) & 0x1) == FILLED_SLOT)) {
             rid = new_rid();
             rid->slot = i;
         }

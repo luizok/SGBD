@@ -11,5 +11,5 @@ Record_t* new_record(BYTE data) {
 
 void print_record(Record_t* record) {
 
-    printf("data: %02x\n", record->data);
+    printf("data: 0x%02x\n", record->data);
 }

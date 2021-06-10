@@ -31,5 +31,4 @@ BOOL is_page_full(Page_t* page);
 BOOL is_page_empty(Page_t* page);
 Record_t** get_records_in_page(Page_t* page);
 
-
 #endif
