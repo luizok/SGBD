@@ -108,8 +108,10 @@ Record_t** get_records_in_page(Page_t* page){
     open_page_file(page);
     fread(page_buffer, RECORD_SIZE, records_in_page, page->records_file);
 
-    for(__uint32_t i=0; i < records_in_page; i++){
-        record_vector[i] = (Record_t*) &page_buffer[i*RECORD_SIZE]; 
+    __uint32_t idx = 0;
+    for(__uint32_t i=0; i < page->max_records; i++){
+        if(((page->bitmap >> i) & 0x1) == FILLED_SLOT)
+            record_vector[idx++] = (Record_t*) &page_buffer[i*RECORD_SIZE];
     }
 
     record_vector[records_in_page] = NULL;

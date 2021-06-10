@@ -178,15 +178,9 @@ Page_t* get_last_used_page(DB_Manager_t* manager) {
 
 Rid_t* get_last_record_rid(DB_Manager_t* manager) {
 
-    Record_t** records = NULL;
     Page_t* root = get_last_used_page(manager);
     Rid_t* rid = new_rid();
-    rid->slot = 0;
-
-    records = get_records_in_page(root);
-    Record_t** last_record;
-    for(last_record = records; *(last_record+1) != NULL; last_record++)
-        rid->slot++;
+    rid->slot = last_filled_slot(root);
 
     return rid;
 }
