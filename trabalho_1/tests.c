@@ -28,7 +28,7 @@ void test_insert(DB_Manager_t* manager) {
     record = new_record(2*n_pages*n_records);
     rid = insert_record(manager, record);
     if(!rid)
-        printf("%d NOT INSERTED\n", 2*n_pages*n_records);
+        printf("0x%02x NOT INSERTED\n", 2*n_pages*n_records);
 
     print_dbmanager(manager);
     printf("\n\n");
@@ -44,10 +44,10 @@ void test_search(DB_Manager_t* manager) {
     for(int i=0; i < 2*n_pages*n_records+1; i++) {
         rid = search_record(manager, new_record(i));
         if(rid) {
-            printf("%d FOUND IN ", i);
+            printf("0x%02x FOUND IN ", i);
             print_rid(rid);
         } else
-            printf("%d NOT FOUND", i);
+            printf("0x%02x NOT FOUND", i);
 
         printf("\n");
     }
@@ -95,10 +95,10 @@ void test_delete(DB_Manager_t* manager) {
         // printf("to_remove[%d] = %d", i, to_remove[i]);
         record = remove_record(manager, new_record(to_remove[i]));
         if(record) {
-            printf("%d REMOVED \n", to_remove[i]);
+            printf("0x%02x REMOVED \n", to_remove[i]);
             print_dbmanager(manager);
         } else
-            printf("%d NOT FOUND\n", to_remove[i]);
+            printf("0x%02x NOT FOUND\n", to_remove[i]);
 
         printf("\n");
     }
@@ -139,6 +139,7 @@ int main(int argc, char** argv) {
     test_remove_all(manager);
 
     print_dbmanager(manager);
+    test_scan(manager);
     printf("\n");
 
     return 0;
