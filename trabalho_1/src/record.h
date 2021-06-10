@@ -3,15 +3,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "utils.h"
 
 
 typedef struct Record {
-    __uint32_t data;
+    BYTE data;
 } Record_t;
 
 #define RECORD_SIZE sizeof(Record_t)
 
-Record_t* new_record(__uint32_t data);
+Record_t* new_record(BYTE data);
 void print_record(Record_t* record);
 
 
