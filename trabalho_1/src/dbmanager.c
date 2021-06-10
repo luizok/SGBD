@@ -226,7 +226,7 @@ Record_t* remove_record(DB_Manager_t* manager, Record_t* record) {
             print_page(last_used_page);
             printf("\nlast slot: %d\n", last_rid->slot);
 
-            if(last_rid->slot >= 0 &&  (last_used_page->page_index == root->page_index && last_rid->slot == rid->slot)) {
+            if(last_rid->slot >= 0 || (last_used_page->page_index != root->page_index && last_rid->slot != rid->slot)) {
                 remove_record_in_page(last_used_page, last_rid->slot);
                 rid = insert_record(manager, last_record);
                 printf("INSERT AT ");

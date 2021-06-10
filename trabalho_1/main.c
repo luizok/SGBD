@@ -6,116 +6,6 @@
 #include "src/dbmanager.h"
 #include "src/rid.h"
 
-
-void test_insert(DB_Manager_t* manager) {
-
-    printf("Insercaozinha top: \n");
-    __uint32_t n_pages = manager->n_pages;
-    __uint32_t n_records = manager->all_pages[0]->max_records;
-    Record_t* record = NULL;
-    Rid_t* rid = NULL;
-
-    for(int i=0; i < n_pages*n_records; i++) {
-        record = new_record(2*i);
-        rid = insert_record(manager, record);
-        printf("%d INSERTED IN ", 2*i );
-        print_rid(rid);
-        printf("\n");
-        print_dbmanager(manager);
-        printf("\n");
-    }
-
-    record = new_record(2*n_pages*n_records);
-    rid = insert_record(manager, record);
-    if(!rid)
-        printf("%d NOT INSERTED\n", 2*n_pages*n_records);
-
-    print_dbmanager(manager);
-    printf("\n\n");
-}
-
-void test_search(DB_Manager_t* manager) {
-
-    printf("Buscazinha top: \n");
-    __uint32_t n_pages = manager->n_pages;
-    __uint32_t n_records = manager->all_pages[0]->max_records;
-    Rid_t* rid = NULL;
-
-    for(int i=0; i < 2*n_pages*n_records+1; i++) {
-        rid = search_record(manager, new_record(i));
-        if(rid) {
-            printf("%d FOUND IN ", i);
-            print_rid(rid);
-        } else
-            printf("%d NOT FOUND", i);
-
-        printf("\n");
-    }
-
-    printf("\n");
-}
-
-void test_scan(DB_Manager_t* manager) {
-
-    printf("Scanzin top: \n");
-    Record_t*** records = get_all_records(manager);
-    Record_t*** curr_page = records;
-
-    for(curr_page; *curr_page != NULL; curr_page++)
-        for(Record_t** curr_record = *curr_page; *curr_record != NULL; curr_record++)
-            print_record(*curr_record);
-}
-
-__uint32_t* numbers_to_remove(__uint32_t n_records) {
-
-    __uint32_t n_removes = 3 * n_records;
-    __uint32_t* to_remove = malloc(n_removes * sizeof(__uint32_t));
-
-    for(int i=0; i < n_records; i++)
-        to_remove[i] = 2 * (n_records + i);
-
-    for(int i=0; i < n_records; i++)
-        to_remove[n_records+i] = 2 * i;
-
-    for(int i=0; i < n_records; i++)
-        to_remove[2*n_records+i] = 2 * (4*n_records - i);
-
-    return to_remove;
-}
-
-void test_delete(DB_Manager_t* manager) {
-
-    printf("\nDelecaozinha top: \n");
-    __uint32_t n_pages = manager->n_pages;
-    __uint32_t n_records = manager->all_pages[0]->max_records;
-    __uint32_t* to_remove = numbers_to_remove(n_records);
-    Record_t* record = NULL;
-
-    for(int i=0; i < 3*n_records; i++) {
-        // printf("to_remove[%d] = %d", i, to_remove[i]);
-        record = remove_record(manager, new_record(to_remove[i]));
-        if(record) {
-            printf("%d REMOVED \n", to_remove[i]);
-            print_dbmanager(manager);
-        } else
-            printf("%d NOT FOUND\n", to_remove[i]);
-
-        printf("\n");
-    }
-
-    printf("\n");
-}
-
-void test_remove_all(DB_Manager_t* manager) {
-
-    Record_t*** records = get_all_records(manager);
-    Record_t*** curr_page = records;
-
-    for(curr_page; *curr_page != NULL; curr_page++)
-        for(Record_t** curr_record = *curr_page; *curr_record != NULL; curr_record++)
-            remove_record(manager, *curr_record);
-}
-
 int main(int argc, char** argv) {
 
     if(argc < 3) {
@@ -131,7 +21,7 @@ int main(int argc, char** argv) {
     print_dbmanager(manager);
     printf("\n");
     int escolha=1;
-    while (escolha != 7)
+    while (escolha != 6)
     {
 
         printf("\n\n ----------------------- ");
@@ -140,21 +30,33 @@ int main(int argc, char** argv) {
         printf("\n ----------------------- ");
         printf("\n Digite 1 para Insercao ");
         printf("\n Digite 2 para Exclusao ");
-        printf("\n Digite 3 para Exclusao de todos os registros ");
-        printf("\n Digite 4 para Busca ");
-        printf("\n Digite 5 para Scan ");
-        printf("\n Digite 6 para ver status do DB Manager ");
-        printf("\n Digite 7 para Fechar Programa ");
+        printf("\n Digite 3 para Busca ");
+        printf("\n Digite 4 para Scan ");
+        printf("\n Digite 5 para ver status do DB Manager ");
+        printf("\n Digite 6 para Fechar Programa ");
         printf("\n\n Escolha uma opcao: ");
         scanf("%d", &escolha);
         switch (escolha) {
 
             case 1:
             {
-
+                
+                BYTE data = 0;
                 printf("\n\n Opcao escolhida: 1 \n");
-                test_insert(manager);
-                printf("\n\n");
+                printf("Insercaozinha top: \n");
+                printf("Digite o byte que deseja inserir: \n");
+                scanf("%hhd", &data);
+                Record_t* record = new_record(data);
+                Rid_t* rid = insert_record(manager, record);
+                if(!rid)
+                    printf(" NOT INSERTED\n");
+
+                else{
+                    printf(" INSERTED ");
+                    print_rid(rid);
+                    printf("\n");      
+                }
+                print_dbmanager(manager);
                 break;
             }
 
@@ -162,8 +64,24 @@ int main(int argc, char** argv) {
             {
 
                 printf("\n\n Opcao escolhida: 2 ");
-                test_delete(manager);
+                BYTE data = 0;
+                printf("\n\n Opcao escolhida: 1 \n");
+                printf("Deleçãozinha top: \n");
+                printf("Digite o byte que deseja remover: \n");
+                scanf("%hhd", &data);
+                Record_t* record = new_record(data);
+                record = remove_record(manager, record);
+                print_record(record);
+                if(!record)
+                    printf(" NOT DELETED\n");
+
+                else{
+                    printf(" DELETED ");
+                    print_record(record);
+                    printf("\n");      
+                }
                 printf("\n\n");
+                print_dbmanager(manager);
                 break;
             }
 
@@ -171,7 +89,20 @@ int main(int argc, char** argv) {
             {
                 
                 printf("\n\n Opcao escolhida: 3 \n");
-                test_remove_all(manager);
+                BYTE data = 0;
+                printf("Buscazinha top: \n");
+                printf("Digite o byte que deseja buscar: \n");
+                scanf("%hhd", &data);
+                Record_t* record = new_record(data);
+                Rid_t* rid = search_record(manager, record);
+                if(!rid)
+                    printf(" NOT FOUND\n");
+
+                else{
+                    printf(" FOUND ");
+                    print_rid(rid);
+                    printf("\n");      
+                }
                 print_dbmanager(manager);
                 printf("\n");    
                 break;
@@ -181,8 +112,14 @@ int main(int argc, char** argv) {
             {
                 
                 printf("\n\n Opcao escolhida: 4 \n");
-                test_search(manager);
-                printf("\n");    
+                printf("Scanzin top: \n");
+                Record_t*** records = get_all_records(manager);
+                Record_t*** curr_page = records;
+
+                for(curr_page; *curr_page != NULL; curr_page++)
+                    for(Record_t** curr_record = *curr_page; *curr_record != NULL; curr_record++)
+                        print_record(*curr_record);
+                            printf("\n");    
                 break;
             }
 
@@ -190,18 +127,9 @@ int main(int argc, char** argv) {
             {
                 
                 printf("\n\n Opcao escolhida: 5 \n");
-                test_scan(manager);
+                print_dbmanager(manager);
                 printf("\n");    
                 break;
-            }
-            case 6:
-            {
-                
-                printf("\n\n Opcao escolhida: 6 \n");
-                print_dbmanager(manager);
-                printf("\n");
-                break;
-                
             }
 
             // opção padrão
@@ -209,7 +137,7 @@ int main(int argc, char** argv) {
             {
 
                 // continue pula o while  
-                if(escolha == 7)
+                if(escolha == 6)
                 {   
                     continue;
                 }
@@ -220,7 +148,7 @@ int main(int argc, char** argv) {
         }
 
     }
-    if(escolha == 7)
+    if(escolha == 6)
         printf("\n\n Programa finalizado ;D\n");
 
 

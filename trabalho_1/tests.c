@@ -115,7 +115,7 @@ void test_remove_all(DB_Manager_t* manager) {
         for(Record_t** curr_record = *curr_page; *curr_record != NULL; curr_record++)
             remove_record(manager, *curr_record);
 }
-
+/*
 int main(int argc, char** argv) {
 
     if(argc < 3) {
@@ -143,4 +143,4 @@ int main(int argc, char** argv) {
     printf("\n");
 
     return 0;
-}
+}*/
