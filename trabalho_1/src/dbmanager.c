@@ -147,10 +147,13 @@ Rid_t* search_record(DB_Manager_t* manager, Record_t* record) {
 
 void move_page_to_empty_pages(DB_Manager_t* manager, Page_t* page) {
 
+    printf("PREV = %p\n", page->prev_page);
     if(page->prev_page) // se não for o primeiro elemento da used_pages
         page->prev_page->next_page = page->next_page;
-    else
+    else {
+        printf("EH RAIZ\n");
         manager->used_pages = page->next_page;
+    }
 
     if(page->next_page)
         page->next_page->prev_page = page->prev_page;
@@ -239,6 +242,7 @@ Record_t* remove_record(DB_Manager_t* manager, Record_t* record) {
                 if(is_page_empty(root))
                     move_page_to_empty_pages(manager, root);
 
+            getchar();
             return record;
         }
 
