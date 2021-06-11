@@ -83,6 +83,7 @@ Rid_t* insert_record(DB_Manager_t* manager, Record_t* record) {
         if((curr_page == NULL) && (last_non_null_page == NULL)) { // Lista de usadas está vazia
             manager->empty_pages = empty_page->next_page;
             manager->empty_pages->prev_page = NULL;
+            empty_page->prev_page = NULL;
             empty_page->next_page = NULL;
             manager->used_pages = empty_page;
 
@@ -146,10 +147,13 @@ Rid_t* search_record(DB_Manager_t* manager, Record_t* record) {
 
 void move_page_to_empty_pages(DB_Manager_t* manager, Page_t* page) {
 
+    printf("PREV = %p\n", page->prev_page);
     if(page->prev_page) // se não for o primeiro elemento da used_pages
         page->prev_page->next_page = page->next_page;
-    else
+    else {
+        printf("EH RAIZ\n");
         manager->used_pages = page->next_page;
+    }
 
     if(page->next_page)
         page->next_page->prev_page = page->prev_page;
@@ -226,20 +230,19 @@ Record_t* remove_record(DB_Manager_t* manager, Record_t* record) {
             print_page(last_used_page);
             printf("\nlast slot: %d\n", last_rid->slot);
 
-            if(last_rid->slot >= 0 || (last_used_page->page_index != root->page_index && last_rid->slot != rid->slot)) {
+            if((__int32_t) last_rid->slot >= 0) { INFERNO
                 remove_record_in_page(last_used_page, last_rid->slot);
                 rid = insert_record(manager, last_record);
-                printf("INSERT AT ");
-                print_rid(rid);
-                printf("\n");
             }
 
             if(is_page_empty(last_used_page))
                 move_page_to_empty_pages(manager, last_used_page);
 
-            if(is_page_empty(root))
-                move_page_to_empty_pages(manager, root);
+            if(last_used_page != root)
+                if(is_page_empty(root))
+                    move_page_to_empty_pages(manager, root);
 
+            getchar();
             return record;
         }
 
