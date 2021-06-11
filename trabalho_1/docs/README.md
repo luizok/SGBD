@@ -30,7 +30,7 @@ O vetor _all_pages_ é um vetor contendo referência para todas as páginas inde
 
 ```bash
 gcc src/*.c [tests|main].c -o [tests|main].exe
-./main.exe
+./main.exe <n_pages> <n_records>
 ```
 
 ---
