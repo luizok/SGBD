@@ -1,27 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "src/record.h"
-#include "src/bucket.h"
 #include "src/ext_hash.h"
+#include "src/utils.h"
 
 
-int main() {
+int main(int argc, char** argv) {
 
-    Record_t* r1 = new_record(__INT64_MAX__);
-    Record_t* r2 = new_record(127);
-    Record_t* r3 = new_record(1);
+    if(argc < 4) {
+        printf("Usage: <txt_file> <global_depth> <n_records>\n");
+        return -1;
+    }
 
-    Bucket_t* bucket = new_bucket(2, 5);
+    char python_cmd[256];
+    sprintf(python_cmd, "python src/converter.py %s", argv[1]);
+    system(python_cmd);
+    
+    FILE* bin_file = fopen("ops.bin", "rb");
+    BYTE op;
+    __uint64_t number;
 
-    add_record_to_bucket(r1, bucket);
-    add_record_to_bucket(r2, bucket);
-    add_record_to_bucket(r3, bucket);
+    Ext_Hash_t* hash = new_ext_hash(atoi(argv[2]), atoi(argv[3]));
+    Record_t* record = new_record(0);
 
-    print_bucket(bucket);
-
-    Ext_Hash_t* hash = new_ext_hash(2, 2);
-
-    print_ext_hash(hash);
+    while((char) (op = fgetc(bin_file)) != EOF) {
+        fread(&record->data, sizeof(__int64_t), 1, bin_file);
+        printf("0x%02X -> ", op);
+        switch(op) {
+            case '\x00': {
+                remove_record(hash, record);
+                break;
+            }
+            case '\x01': {
+                add_record(hash, record);
+                break;
+            }
+            case '\x02': {
+                search_record(hash, record);
+                break;
+            }
+        }
+    }
 
     return 0;
 }

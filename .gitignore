@@ -1,2 +1,4 @@
 *.exe
 *.dbpage
+*.bin
+.vscode/
