@@ -26,3 +26,27 @@ void print_ext_hash(Ext_Hash_t* hash) {
         print_bucket(hash->directories[i]);
     }
 }
+
+void remove_record(Ext_Hash_t* hash, Record_t* record) {
+    
+    printf("REMOVED ");
+    print_record(record);
+    printf("\n");
+    return;
+}
+
+void add_record(Ext_Hash_t* hash, Record_t* record) {
+    
+    printf("ADDED ");
+    print_record(record);
+    printf("\n");
+    return;
+}
+
+void search_record(Ext_Hash_t* hash, Record_t* record) {
+    
+    printf("SEARCH ");
+    print_record(record);
+    printf("\n");
+    return;
+}
