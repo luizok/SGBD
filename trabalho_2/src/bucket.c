@@ -8,7 +8,7 @@ Bucket_t* new_bucket(__uint32_t local_depth, __uint32_t n_records) {
     bucket->n_records = n_records;
     bucket->records = (Record_t**) calloc(n_records, sizeof(Record_t*));
     bucket->index = 0; // TEST PURPOSES
-    bucket->next = NULL;
+    // bucket->next = NULL;
 
     return bucket;
 }
@@ -29,8 +29,8 @@ void print_bucket(Bucket_t* bucket) {
         else
             printf("________, ");
     }
-    printf("\x08\x08} -> ");
-    print_bucket(bucket->next);
+    printf("\x08\x08}");
+    // print_bucket(bucket->next);
 }
 
 void add_record_to_bucket(Record_t* record, Bucket_t* bucket) {

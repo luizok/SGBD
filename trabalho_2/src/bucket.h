@@ -13,7 +13,7 @@ typedef struct Bucket {
     __uint32_t n_records;
     Record_t** records;
     int index; // TEST PURPOSES
-    struct Bucket* next;
+    // struct Bucket* next;
 } Bucket_t;
 
 #define BUCKET_SIZE sizeof(Bucket_t)
