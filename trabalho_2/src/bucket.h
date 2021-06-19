@@ -13,6 +13,7 @@ typedef struct Bucket {
     __uint32_t n_records;
     Record_t** records;
     int index; // TEST PURPOSES
+    __uint32_t bucket_id;
     // struct Bucket* next;
 } Bucket_t;
 

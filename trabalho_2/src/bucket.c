@@ -1,6 +1,8 @@
 #include "bucket.h"
 
 
+__uint32_t bucket_id = 0;
+
 Bucket_t* new_bucket(__uint32_t local_depth, __uint32_t n_records) {
 
     Bucket_t* bucket = (Bucket_t*) malloc(BUCKET_SIZE);
@@ -8,6 +10,7 @@ Bucket_t* new_bucket(__uint32_t local_depth, __uint32_t n_records) {
     bucket->n_records = n_records;
     bucket->records = (Record_t**) calloc(n_records, sizeof(Record_t*));
     bucket->index = 0; // TEST PURPOSES
+    bucket->bucket_id = bucket_id++;
     // bucket->next = NULL;
 
     return bucket;
@@ -20,7 +23,7 @@ void print_bucket(Bucket_t* bucket) {
         return;
     }
 
-    printf("{%02d: ", bucket->local_depth);
+    printf("{<IDX:%02d, LD:%02d>: ", bucket->bucket_id, bucket->local_depth);
     for(int i=0; i < bucket->n_records; i++) {
         if(bucket->records[i]) {
             print_record(bucket->records[i]);

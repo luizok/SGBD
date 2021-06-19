@@ -21,26 +21,28 @@ int main(int argc, char** argv) {
     __uint64_t number;
 
     Ext_Hash_t* hash = new_ext_hash(atoi(argv[2]), atoi(argv[3]));
-    Record_t* record = new_record(0);
-
     while((char) (op = fgetc(bin_file)) != EOF) {
+
+        Record_t* record = new_record(0);
         fread(&record->data, sizeof(__int64_t), 1, bin_file);
-        printf("0x%02X -> ", op);
+
         switch(op) {
             case '\x00': {
-                remove_record(hash, record);
+                remove_record(record, hash);
                 break;
             }
             case '\x01': {
-                add_record(hash, record);
+                add_record(record, hash);
                 break;
             }
             case '\x02': {
-                search_record(hash, record);
+                search_record(record, hash);
                 break;
             }
         }
     }
+
+    print_ext_hash(hash);
 
     return 0;
 }

@@ -11,6 +11,8 @@
 typedef struct Ext_Hash {
     __uint32_t global_depth;
     __uint32_t n_dirs;
+    __uint32_t old_n_dirs;
+    __uint32_t records_per_bucket;
     Bucket_t** directories;
 } Ext_Hash_t;
 
