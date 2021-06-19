@@ -13,6 +13,7 @@ int main() {
     Record_t* r3 = new_record(1);
     Record_t* r4 = new_record(127);
     Record_t* r5 = new_record(128);
+    Record_t* r6 = new_record(0);
 
     printf("cmp(r2, r4) = %d\n", cmp_records(r2, r4)); // 0
     printf("cmp(r2, r3) = %d\n", cmp_records(r2, r3)); // -1
@@ -37,6 +38,11 @@ int main() {
     printf("FOUND AT %d\n", slot);
 
     Ext_Hash_t* hash = new_ext_hash(2, 2);
+    add_record(r6, hash);
+    add_record(r3, hash);
+    add_record(r2, hash);
+    add_record(r5, hash);
+    add_record(r5, hash);
 
     print_ext_hash(hash);
 

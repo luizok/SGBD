@@ -43,8 +43,12 @@ __int32_t remove_record_from_bucket(Record_t* record, Bucket_t* bucket) {
 
 __int32_t add_record_to_bucket(Record_t* record, Bucket_t* bucket) {
 
+    if(bucket->index == bucket->n_records)
+        return -1;
+
     bucket->records[bucket->index] = record;
-    bucket->index++;
+
+    return bucket->index++;
 }
 
 __int32_t search_record_in_bucket(Record_t* record, Bucket_t* bucket) {
