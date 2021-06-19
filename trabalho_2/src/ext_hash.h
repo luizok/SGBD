@@ -21,8 +21,8 @@ typedef struct Ext_Hash {
 
 Ext_Hash_t* new_ext_hash(__uint32_t global_depth, __uint32_t records_per_bucket);
 void print_ext_hash(Ext_Hash_t* hash);
-Rid_t* remove_record(Record_t* record, Ext_Hash_t* hash);
-Rid_t* add_record(Record_t* record, Ext_Hash_t* hash);
-Rid_t* search_record(Record_t* record, Ext_Hash_t* hash);
+Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record);
+Rid_t* add_record(Ext_Hash_t* hash, Record_t* record);
+Rid_t* search_record(Ext_Hash_t* hash, Record_t* record);
 
 #endif

@@ -47,7 +47,6 @@ void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needsDouble) {
 
 void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k) {
 
-    print_ext_hash(hash);
     Bucket_t* kth_bucket = new_bucket(-1, -1);
     __uint32_t bucket_idx;
 
@@ -76,7 +75,7 @@ void print_ext_hash(Ext_Hash_t* hash) {
     }
 }
 
-Rid_t* remove_record(Record_t* record, Ext_Hash_t* hash) {
+Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
     
     printf("REMOVED ");
     print_record(record);
@@ -84,7 +83,7 @@ Rid_t* remove_record(Record_t* record, Ext_Hash_t* hash) {
     return NULL;
 }
 
-Rid_t* add_record(Record_t* record, Ext_Hash_t* hash) {
+Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {
     
     printf("ADDED RECORD ");
     print_record(record);
@@ -106,7 +105,7 @@ Rid_t* add_record(Record_t* record, Ext_Hash_t* hash) {
     return rid;
 }
 
-Rid_t* search_record(Record_t* record, Ext_Hash_t* hash) {
+Rid_t* search_record(Ext_Hash_t* hash, Record_t* record) {
     
     printf("SEARCH ");
     print_record(record);

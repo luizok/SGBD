@@ -28,21 +28,21 @@ int main(int argc, char** argv) {
 
         switch(op) {
             case '\x00': {
-                remove_record(record, hash);
+                remove_record(hash, record);
                 break;
             }
             case '\x01': {
-                add_record(record, hash);
+                add_record(hash, record);
                 break;
             }
             case '\x02': {
-                search_record(record, hash);
+                search_record(hash, record);
                 break;
             }
         }
-    }
 
-    print_ext_hash(hash);
+        print_ext_hash(hash);
+    }
 
     return 0;
 }

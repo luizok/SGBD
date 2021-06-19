@@ -30,7 +30,6 @@ int main() {
 
     __int32_t slot = search_record_in_bucket(r2, bucket);
     printf("FOUND AT %d\n", slot);
-
     slot = search_record_in_bucket(NULL, bucket);
     printf("FOUND AT %d\n", slot);
 
@@ -43,8 +42,5 @@ int main() {
     add_record(r2, hash);
     add_record(r5, hash);
     add_record(r5, hash);
-
-    print_ext_hash(hash);
-
     return 0;
 }
