@@ -14,6 +14,7 @@ typedef struct Record {
 
 Record_t* new_record(__int64_t data);
 void print_record(Record_t* record);
+__int32_t cmp_records(Record_t* r1, Record_t* r2);
 
 
 #endif
