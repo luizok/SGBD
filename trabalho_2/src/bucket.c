@@ -29,12 +29,26 @@ void print_bucket(Bucket_t* bucket) {
         else
             printf("________, ");
     }
-    printf("\x08\x08}");
+    printf("\x08\x08}\n");
     // print_bucket(bucket->next);
 }
 
-void add_record_to_bucket(Record_t* record, Bucket_t* bucket) {
+__int32_t remove_record_from_bucket(Record_t* record, Bucket_t* bucket) {
+
+    return -1;
+}
+
+__int32_t add_record_to_bucket(Record_t* record, Bucket_t* bucket) {
 
     bucket->records[bucket->index] = record;
     bucket->index++;
+}
+
+__int32_t search_record_in_bucket(Record_t* record, Bucket_t* bucket) {
+
+    for(int i=0; i <  bucket->n_records; i++)
+        if(cmp_records(record, bucket->records[i]) == 0)
+            return i;
+
+    return -1;
 }

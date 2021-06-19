@@ -20,6 +20,8 @@ typedef struct Bucket {
 
 Bucket_t* new_bucket(__uint32_t local_depth, __uint32_t n_records);
 void print_bucket(Bucket_t* bucket);
-void add_record_to_bucket(Record_t* record, Bucket_t* bucket);
+__int32_t remove_record_from_bucket(Record_t* record, Bucket_t* bucket);
+__int32_t add_record_to_bucket(Record_t* record, Bucket_t* bucket);
+__int32_t search_record_in_bucket(Record_t* record, Bucket_t* bucket);
 
 #endif
