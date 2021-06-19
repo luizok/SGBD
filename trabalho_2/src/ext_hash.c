@@ -27,26 +27,26 @@ void print_ext_hash(Ext_Hash_t* hash) {
     }
 }
 
-void remove_record(Ext_Hash_t* hash, Record_t* record) {
+Rid_t* remove_record(Record_t* record, Ext_Hash_t* hash) {
     
     printf("REMOVED ");
     print_record(record);
     printf("\n");
-    return;
+    return NULL;
 }
 
-void add_record(Ext_Hash_t* hash, Record_t* record) {
+Rid_t* add_record(Record_t* record, Ext_Hash_t* hash) {
     
     printf("ADDED ");
     print_record(record);
     printf("\n");
-    return;
+    return NULL;
 }
 
-void search_record(Ext_Hash_t* hash, Record_t* record) {
+Rid_t* search_record(Record_t* record, Ext_Hash_t* hash) {
     
     printf("SEARCH ");
     print_record(record);
     printf("\n");
-    return;
+    return NULL;
 }

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bucket.h"
+#include "rid.h"
 
 
 typedef struct Ext_Hash {
@@ -17,8 +18,8 @@ typedef struct Ext_Hash {
 
 Ext_Hash_t* new_ext_hash(__uint32_t global_depth, __uint32_t records_per_bucket);
 void print_ext_hash(Ext_Hash_t* hash);
-void remove_record(Ext_Hash_t* hash, Record_t* record);
-void add_record(Ext_Hash_t* hash, Record_t* record);
-void search_record(Ext_Hash_t* hash, Record_t* record);
+Rid_t* remove_record(Record_t* record, Ext_Hash_t* hash);
+Rid_t* add_record(Record_t* record, Ext_Hash_t* hash);
+Rid_t* search_record(Record_t* record, Ext_Hash_t* hash);
 
 #endif
