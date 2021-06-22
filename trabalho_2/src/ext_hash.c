@@ -80,7 +80,19 @@ Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
     printf("REMOVED ");
     print_record(record);
     printf("\n");
-    return NULL;
+    __int32_t bucket_idx = hash_func(record, hash->global_depth);
+    __int32_t slot = remove_record_from_bucket(record, hash->directories[bucket_idx]);
+    Rid_t* rid = search_record(hash, record);
+
+    if(slot > -1) {
+        rid->page = bucket_idx;
+        rid->slot = slot;
+    }
+    else{//slot nao encontrado
+        printf("Slot nao encontrado \n");
+        return -1;
+    }
+    return rid;
 }
 
 Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {

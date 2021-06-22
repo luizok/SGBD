@@ -38,7 +38,15 @@ void print_bucket(Bucket_t* bucket) {
 
 __int32_t remove_record_from_bucket(Record_t* record, Bucket_t* bucket) {
 
-    return -1;
+   __int32_t rec = search_record_in_bucket(record, bucket);
+   if(rec == -1){  
+        printf("Isso non ecziste - nenhum elemento removido\n");
+        return -1;
+   }else{
+        bucket->index;    
+        free(bucket->records[rec]);
+        //atribuir pra null
+    }
 }
 
 __int32_t add_record_to_bucket(Record_t* record, Bucket_t* bucket) {
