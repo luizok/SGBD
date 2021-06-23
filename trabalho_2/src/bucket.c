@@ -46,6 +46,7 @@ __int32_t remove_record_from_bucket(Record_t* record, Bucket_t* bucket) {
         bucket->index;    
         free(bucket->records[rec]);
         //atribuir pra null
+        
     }
 }
 
