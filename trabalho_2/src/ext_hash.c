@@ -77,13 +77,13 @@ void print_ext_hash(Ext_Hash_t* hash) {
 
 Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
     
-    printf("REMOVED ");
+    printf("Remoçãozinha top \n");
     print_record(record);
     printf("\n");
     Rid_t* rid = search_record(hash, record);
 
-    if(rid != null) {
-         __int32_t slot = remove_record_from_bucket(record, rid->page);
+    if(rid != NULL) {
+         __int32_t slot = remove_record_from_bucket(record, hash->directories[rid->page]);
         //rid->page = bucket_idx;
         rid->slot = slot;
     }
