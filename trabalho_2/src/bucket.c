@@ -52,12 +52,13 @@ __int32_t remove_record_from_bucket(Record_t* record, Bucket_t* bucket) {
 
 __int32_t add_record_to_bucket(Record_t* record, Bucket_t* bucket) {
 
-    if(bucket->index == bucket->n_records)
-        return -1;
+    for(int i=0; i < bucket->n_records; i++)
+        if(!bucket->records[i]) {
+            bucket->records[i] = record;
+            return i;
+        }
 
-    bucket->records[bucket->index] = record;
-
-    return bucket->index++;
+    return -1;
 }
 
 __int32_t search_record_in_bucket(Record_t* record, Bucket_t* bucket) {
