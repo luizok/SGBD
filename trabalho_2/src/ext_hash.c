@@ -25,39 +25,53 @@ __uint32_t hash_func(Record_t* record, __uint32_t depth) {
     return record->data & (0xFFFFFFFF >> (32 - depth));
 }
 
-void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needsDouble) {
+void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needs_double) {
 
-    hash->old_n_dirs = hash->n_dirs;
-    hash->n_dirs <<= 1;
-    hash->global_depth++;
+    if(needs_double) {
 
-    if(needsDouble) {
+        hash->old_n_dirs = hash->n_dirs;
+        hash->n_dirs <<= 1;
+        hash->global_depth++;
         printf("DOUBLE DIRS\n");
+
         hash->directories = (Bucket_t**) realloc(hash->directories, hash->n_dirs * sizeof(Bucket_t*));
         hash->directories[k]->local_depth++;
-    }
 
-    for(int i=0; i < hash->old_n_dirs; i++) {
-        if(i == k)
-            hash->directories[hash->old_n_dirs + i] = new_bucket(hash->global_depth, hash->directories[i]->n_records);
-        else
-            hash->directories[hash->old_n_dirs + i] = hash->directories[i];
+        for(int i=0; i < hash->old_n_dirs; i++) {
+            if(i == k)
+                hash->directories[hash->old_n_dirs + i] = new_bucket(hash->global_depth, hash->directories[i]->n_records);
+            else
+                hash->directories[hash->old_n_dirs + i] = hash->directories[i];
+        }
+    }
+    else {
+        // hash->directories[k] = new_bucket(hash->global_depth, hash->directories[k]->n_records);
+        hash->directories[k]->local_depth++;
     }
 }
 
 void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k) {
 
-    Bucket_t* kth_bucket = new_bucket(-1, -1);
+    __int32_t bucket_a_idx = (0 << k) | k;
+    __int32_t bucket_b_idx = (1 << k) | k;
+
+    printf("A = \nB = \n");
+
+    Bucket_t* kth_bucket = new_bucket(hash->directories[k]->local_depth, hash->directories[k]->n_records);
     __uint32_t bucket_idx;
 
     memcpy(kth_bucket, hash->directories[k], BUCKET_SIZE);
-    free(hash->directories[k]);
+    // free(hash->directories[k]);
+    printf("DFHSDJIFGHJFHSJDKF\n");
+    print_bucket(kth_bucket);
+    print_bucket(hash->directories[k]);
 
     hash->directories[k] = new_bucket(kth_bucket->local_depth, kth_bucket->n_records);
-
     for(int i=0; i < kth_bucket->n_records; i++) {
-        bucket_idx = hash_func(kth_bucket->records[i], hash->global_depth);
-        add_record_to_bucket(kth_bucket->records[i], hash->directories[bucket_idx]);
+        if(kth_bucket->records[i]) {
+            bucket_idx = hash_func(kth_bucket->records[i], hash->global_depth);
+            add_record_to_bucket(kth_bucket->records[i], hash->directories[bucket_idx]);
+        }
     }
 }
 
@@ -80,18 +94,7 @@ Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
     printf("REMOVED ");
     print_record(record);
     printf("\n");
-    Rid_t* rid = search_record(hash, record);
-
-    if(rid != null) {
-         __int32_t slot = remove_record_from_bucket(record, rid->page);
-        //rid->page = bucket_idx;
-        rid->slot = slot;
-    }
-    else{//slot nao encontrado
-        printf("Slot nao encontrado \n");
-        return -1;
-    }
-    return rid;
+    return NULL;
 }
 
 Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {
@@ -110,7 +113,13 @@ Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {
     } else { // slot ta cheio
         printf("SPLIT BUCKET\n");
         split_kth_bucket(hash, bucket_idx, hash->directories[bucket_idx]->local_depth == hash->global_depth);
+        printf("SPLITADO\n");
         split_records_between_buckets(hash, bucket_idx);
+        printf("RECORDS SPLITADOS\n");
+
+        bucket_idx = hash_func(record, hash->global_depth);
+        rid->page = bucket_idx;
+        rid->slot = add_record_to_bucket(record, hash->directories[bucket_idx]);
     }
 
     return rid;
