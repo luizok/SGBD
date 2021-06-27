@@ -43,11 +43,11 @@ __int32_t remove_record_from_bucket(Record_t* record, Bucket_t* bucket) {
         printf("Isso non ecziste - nenhum elemento removido\n");
         return -1;
    }else{
-        bucket->index;    
         free(bucket->records[rec]);
-        //atribuir pra null
-        
+        bucket->records[rec] = NULL;
+        //atribuir pra null       
     }
+    return rec;
 }
 
 __int32_t add_record_to_bucket(Record_t* record, Bucket_t* bucket) {

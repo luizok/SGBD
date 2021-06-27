@@ -27,7 +27,11 @@ int main() {
     add_record_to_bucket(r3, bucket);
 
     print_bucket(bucket);
+    //testing remove
+    remove_record_from_bucket(r3, bucket);
 
+    print_bucket(bucket);
+    
     __int32_t slot = search_record_in_bucket(r2, bucket);
     printf("FOUND AT %d\n", slot);
     slot = search_record_in_bucket(NULL, bucket);
