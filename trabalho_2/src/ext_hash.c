@@ -6,6 +6,7 @@ FILE* output_file;
 __uint32_t hash_func(Record_t* record, __uint32_t depth);
 void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needsDouble);
 void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k);
+void print_binary(__uint32_t k, __int32_t global_depth);
 
 
 Ext_Hash_t* new_ext_hash(__uint32_t global_depth, __uint32_t records_per_bucket) {
@@ -74,6 +75,12 @@ void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k) {
     free(raw_bucket);
 }
 
+void print_binary(__uint32_t k, __int32_t global_depth) {
+
+    for(int i=global_depth-1; i >= 0; i--)
+        printf("%d", (k >> i) & 1);
+}
+
 void print_ext_hash(Ext_Hash_t* hash) {
 
     if(!hash) {
@@ -83,7 +90,9 @@ void print_ext_hash(Ext_Hash_t* hash) {
 
     printf("GD: %02d\n", hash->global_depth);
     for(int i=0; i < hash->n_dirs; i++) {
-        printf("%04X -> ", i & (0xFFFFFFFF >> (32 - hash->global_depth)));
+        print_binary(i, hash->global_depth);
+        printf(" -> ");
+        // printf("  %04X -> ", i & (0xFFFFFFFF >> (32 - hash->global_depth)));
         print_bucket(hash->directories[i]);
     }
 }
