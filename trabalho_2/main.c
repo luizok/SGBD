@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    output_file = fopen("output.txt", 'w');
+    output_file = fopen("output.txt", "w");
     char python_cmd[256];
     sprintf(python_cmd, "python src/converter.py %s", argv[1]);
     system(python_cmd);
