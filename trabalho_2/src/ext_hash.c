@@ -92,15 +92,10 @@ void print_ext_hash(Ext_Hash_t* hash) {
 Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
     
     printf("Remoçãozinha top \n");
-    print_record(record);
-    printf("\n");
     Rid_t* rid = search_record(hash, record);
 
-    if(rid != NULL) {
-         __int32_t slot = remove_record_from_bucket(record, hash->directories[rid->page]);
-        //rid->page = bucket_idx;
-        rid->slot = slot;
-    }
+    if(rid->slot == -1)
+        remove_record_from_bucket(record, hash->directories[rid->page]);
     else{//slot nao encontrado
         printf("Slot nao encontrado \n");
         return -1;
@@ -137,11 +132,10 @@ Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {
 }
 
 Rid_t* search_record(Ext_Hash_t* hash, Record_t* record) {
-    
-    printf("SEARCH ");
-    __int32_t bucket_idx = hash_func(record, hash->global_depth);
-    __int32_t slot = search_record_in_bucket(record, hash->directories[bucket_idx]);
-    print_record(record);
-    printf("\n");
-    return NULL;
+
+    Rid_t* rid = new_rid(-1, -1);
+    rid->page = hash_func(record, hash->global_depth);
+    rid->slot = search_record_in_bucket(record, hash->directories[rid->page]);
+
+    return rid;
 }

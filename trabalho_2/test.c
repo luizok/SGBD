@@ -28,7 +28,6 @@ int main() {
 
     print_bucket(bucket);
     //testing remove
-    remove_record_from_bucket(r3, bucket);
 
     print_bucket(bucket);
     
@@ -41,10 +40,18 @@ int main() {
     printf("FOUND AT %d\n", slot);
 
     Ext_Hash_t* hash = new_ext_hash(2, 2);
-    add_record(r6, hash);
-    add_record(r3, hash);
-    add_record(r2, hash);
-    add_record(r5, hash);
-    add_record(r5, hash);
+    add_record(hash, r6);
+    add_record(hash, r3);
+    add_record(hash, r2);
+    add_record(hash, r5);
+    add_record(hash, r5);
+
+    slot = remove_record_from_bucket(r3, bucket);
+    printf("REMOVIDO DO SLOT %d\n", slot);
+    slot = remove_record_from_bucket(r1, bucket);
+    printf("REMOVIDO DO SLOT %d\n", slot);
+    slot = remove_record_from_bucket(r5, bucket);
+    printf("REMOVIDO DO SLOT %d\n", slot);
+
     return 0;
 }
