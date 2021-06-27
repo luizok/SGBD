@@ -45,36 +45,33 @@ void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needs_double) {
             else
                 hash->directories[hash->old_n_dirs + i] = hash->directories[i];
         }
-    }
-    else {
-        // hash->directories[k] = new_bucket(hash->global_depth, hash->directories[k]->n_records);
+    } else {
         hash->directories[k]->local_depth++;
     }
 }
 
 void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k) {
 
-    __int32_t bucket_a_idx = (0 << k) | k;
-    __int32_t bucket_b_idx = (1 << k) | k;
+    __int32_t bucket_a_idx = (0 << (hash->global_depth-1)) | k;
+    __int32_t bucket_b_idx = (1 << (hash->global_depth-1)) | k;
 
-    printf("A = \nB = \n");
+    printf("A = %d\nB = %d\n", bucket_a_idx, bucket_b_idx);
 
-    Bucket_t* kth_bucket = new_bucket(hash->directories[k]->local_depth, hash->directories[k]->n_records);
+    Bucket_t* raw_bucket = (Bucket_t*) malloc(BUCKET_SIZE);
+    memcpy(raw_bucket, hash->directories[k], BUCKET_SIZE);
+
+    hash->directories[bucket_a_idx] = new_bucket(raw_bucket->local_depth, raw_bucket->n_records);
+    hash->directories[bucket_b_idx] = new_bucket(raw_bucket->local_depth, raw_bucket->n_records);
+
     __uint32_t bucket_idx;
-
-    memcpy(kth_bucket, hash->directories[k], BUCKET_SIZE);
-    // free(hash->directories[k]);
-    printf("DFHSDJIFGHJFHSJDKF\n");
-    print_bucket(kth_bucket);
-    print_bucket(hash->directories[k]);
-
-    hash->directories[k] = new_bucket(kth_bucket->local_depth, kth_bucket->n_records);
-    for(int i=0; i < kth_bucket->n_records; i++) {
-        if(kth_bucket->records[i]) {
-            bucket_idx = hash_func(kth_bucket->records[i], hash->global_depth);
-            add_record_to_bucket(kth_bucket->records[i], hash->directories[bucket_idx]);
+    for(int i=0; i < raw_bucket->n_records; i++) {
+        if(raw_bucket->records[i]) {
+            bucket_idx = hash_func(raw_bucket->records[i], hash->global_depth);
+            add_record_to_bucket(raw_bucket->records[i], hash->directories[bucket_idx]);
         }
     }
+
+    free(raw_bucket);
 }
 
 void print_ext_hash(Ext_Hash_t* hash) {
@@ -96,12 +93,13 @@ Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
     printf("Remoçãozinha top \n");
     Rid_t* rid = search_record(hash, record);
 
-    if(rid->slot == -1)
+    if(rid->slot >= 0)
         remove_record_from_bucket(record, hash->directories[rid->page]);
     else{//slot nao encontrado
         printf("Slot nao encontrado \n");
         return -1;
     }
+
     return rid;
 }
 
