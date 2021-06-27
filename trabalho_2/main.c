@@ -5,6 +5,8 @@
 #include "src/utils.h"
 
 
+extern FILE* output_file = NULL;
+
 int main(int argc, char** argv) {
 
     if(argc < 4) {
@@ -12,6 +14,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+    output_file = fopen("output.txt", 'w');
     char python_cmd[256];
     sprintf(python_cmd, "python src/converter.py %s", argv[1]);
     system(python_cmd);
@@ -43,6 +46,8 @@ int main(int argc, char** argv) {
 
         print_ext_hash(hash);
     }
+
+    fclose(output_file);
 
     return 0;
 }

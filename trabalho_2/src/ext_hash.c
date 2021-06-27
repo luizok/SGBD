@@ -1,6 +1,8 @@
 #include "ext_hash.h"
 
 
+FILE* output_file;
+
 __uint32_t hash_func(Record_t* record, __uint32_t depth);
 void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needsDouble);
 void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k);
@@ -32,7 +34,7 @@ void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needs_double) {
         hash->old_n_dirs = hash->n_dirs;
         hash->n_dirs <<= 1;
         hash->global_depth++;
-        printf("DOUBLE DIRS\n");
+        // fprintf(output_file, "DOUBLE DIRS%d\n", 1);
 
         hash->directories = (Bucket_t**) realloc(hash->directories, hash->n_dirs * sizeof(Bucket_t*));
         hash->directories[k]->local_depth++;
@@ -104,7 +106,7 @@ Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
 }
 
 Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {
-    
+
     printf("ADDED RECORD ");
     print_record(record);
     printf("\n");

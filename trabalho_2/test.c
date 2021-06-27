@@ -6,7 +6,11 @@
 #include "src/rid.h"
 
 
+extern FILE* output_file = NULL;
+
 int main() {
+
+    output_file = fopen("output.txt", "w");
 
     Record_t* r1 = new_record(__INT64_MAX__);
     Record_t* r2 = new_record(127);
@@ -52,6 +56,8 @@ int main() {
     printf("REMOVIDO DO SLOT %d\n", slot);
     slot = remove_record_from_bucket(r5, bucket);
     printf("REMOVIDO DO SLOT %d\n", slot);
+
+    fclose(output_file);
 
     return 0;
 }
