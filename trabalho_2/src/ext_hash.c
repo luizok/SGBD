@@ -35,7 +35,7 @@ void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needs_double) {
         hash->old_n_dirs = hash->n_dirs;
         hash->n_dirs <<= 1;
         hash->global_depth++;
-        //fprintf(output_file, "DOUBLE DIRS%d\n");
+        fprintf(output_file, "DUP DIR - LD: %d, GD: %d\n", hash->directories[k]->local_depth, hash->global_depth);
 
         hash->directories = (Bucket_t**) realloc(hash->directories, hash->n_dirs * sizeof(Bucket_t*));
         hash->directories[k]->local_depth++;
@@ -49,7 +49,6 @@ void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needs_double) {
     } else {
         hash->directories[k]->local_depth++;
     }
-    fprintf(output_file, "DOBRAR TAM - Prof. local: %d " + hash->directories[k]->local_depth, "Prof. Global: /d \n" + hash->global_depth);
 }
 
 void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k) {
@@ -105,10 +104,10 @@ Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
 
     if(rid->slot >= 0){
         remove_record_from_bucket(record, hash->directories[rid->page]);
-        fprintf(output_file, "Bucket: %d " + rid->page, "Slot: %d \n" + rid->slot);
+        fprintf(output_file, "BUS:%lu\t<%d, %d>\n", record->data, rid->page, rid->slot);
     }else{//slot nao encontrado
         printf("Slot nao encontrado \n");
-        fprintf(output_file, "-1 - Não encontrado");
+        fprintf(output_file, "BUS:%lu\t-1 - Não encontrado\n", record->data);
         //return -1; nao precisa, pois o rid já é slot -1 do buscar
         }
     return rid;
@@ -139,7 +138,9 @@ Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {
         rid->page = bucket_idx;
         rid->slot = add_record_to_bucket(record, hash->directories[bucket_idx]);
     }
-    fprintf(output_file, "Bucket: %d " + rid->page, "Slot: %d " + rid->slot, "Prof. local: %d\n " + hash->directories[bucket_idx]->local_depth);
+
+    fprintf(output_file, "INC:%lu\t<%d, %d>\tLD = %d\n", record->data, rid->page, rid->slot, hash->directories[bucket_idx]->local_depth);
+
     return rid;
 }
 
@@ -149,9 +150,9 @@ Rid_t* search_record(Ext_Hash_t* hash, Record_t* record) {
     rid->page = hash_func(record, hash->global_depth);
     rid->slot = search_record_in_bucket(record, hash->directories[rid->page]);
     if(rid->slot == -1)
-        fprintf(output_file, "Bucket: %d " + rid->page, "-1 - Nem achou, moh cringe \n");    
+        fprintf(output_file, "REM:%lu\t-1 - Nem achou, moh cringe\n", record->data);
     else{
-        fprintf(output_file, "Bucket: %d " + rid->page, "Slot: %d \n" + rid->slot);
+        fprintf(output_file, "REM:%lu\t<%d, %d>\n", record->data, rid->page, rid->slot);
     }
     return rid;
 }
