@@ -104,14 +104,17 @@ void print_ext_hash(Ext_Hash_t* hash) {
 Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
     
     printf("Remoçãozinha top \n");
-    Rid_t* rid = search_record(hash, record);
+
+    __int32_t bucket_idx = hash_func(record, hash->global_depth);
+    __int32_t slot = search_record_in_bucket(record, hash->directories[bucket_idx]);
+    Rid_t* rid = new_rid(bucket_idx, slot);
 
     if(rid->slot >= 0){
         remove_record_from_bucket(record, hash->directories[rid->page]);
-        fprintf(output_file, "BUS:%lu \t<%s, %d>\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot);
+        fprintf(output_file, "REM:%lu \t<%s, %d>\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot);
     }else{//slot nao encontrado
         printf("Slot nao encontrado \n");
-        fprintf(output_file, "BUS:%lu \t-1 - Não encontrado\n", record->data);
+        fprintf(output_file, "REM:%lu \t-1 - Não encontrado\n", record->data);
         //return -1; nao precisa, pois o rid já é slot -1 do buscar
         }
     return rid;
@@ -153,10 +156,11 @@ Rid_t* search_record(Ext_Hash_t* hash, Record_t* record) {
     Rid_t* rid = new_rid(-1, -1);
     rid->page = hash_func(record, hash->global_depth);
     rid->slot = search_record_in_bucket(record, hash->directories[rid->page]);
+
     if(rid->slot == -1)
-        fprintf(output_file, "REM:%lu \t-1 - Nem achou, moh cringe\n", record->data);
+        fprintf(output_file, "BUS:%lu \t-1 - Nem achou, moh cringe\n", record->data);
     else{
-        fprintf(output_file, "REM:%lu \t<%s, %d>\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot);
+        fprintf(output_file, "BUS:%lu \t<%s, %d>\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot);
     }
     return rid;
 }
