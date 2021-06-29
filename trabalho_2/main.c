@@ -24,6 +24,9 @@ int main(int argc, char** argv) {
     __uint64_t number;
 
     Ext_Hash_t* hash = new_ext_hash(atoi(argv[2]), atoi(argv[3]));
+
+    fprintf(output_file, "GD: %d\n", atoi(argv[2]));
+
     while((char) (op = fgetc(bin_file)) != EOF) {
 
         Record_t* record = new_record(0);

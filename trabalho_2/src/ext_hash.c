@@ -6,7 +6,7 @@ FILE* output_file;
 __uint32_t hash_func(Record_t* record, __uint32_t depth);
 void split_kth_bucket(Ext_Hash_t* hash, __int32_t k, BOOL needsDouble);
 void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k);
-void print_binary(__uint32_t k, __int32_t global_depth);
+char* print_binary(__uint32_t k, __int32_t n_bits);
 
 
 Ext_Hash_t* new_ext_hash(__uint32_t global_depth, __uint32_t records_per_bucket) {
@@ -75,10 +75,15 @@ void split_records_between_buckets(Ext_Hash_t* hash, __int32_t k) {
     free(raw_bucket);
 }
 
-void print_binary(__uint32_t k, __int32_t global_depth) {
+char* print_binary(__uint32_t k, __int32_t n_bits) {
 
-    for(int i=global_depth-1; i >= 0; i--)
-        printf("%d", (k >> i) & 1);
+    char* str = (char*) malloc(n_bits+1);
+
+    str[n_bits] = '\0';
+    for(int i=0; i < n_bits; i++)
+        str[i] = 48 + ((k >> (n_bits-i-1)) & 1);
+
+    return str;
 }
 
 void print_ext_hash(Ext_Hash_t* hash) {
@@ -90,8 +95,7 @@ void print_ext_hash(Ext_Hash_t* hash) {
 
     printf("GD: %02d\n", hash->global_depth);
     for(int i=0; i < hash->n_dirs; i++) {
-        print_binary(i, hash->global_depth);
-        printf(" -> ");
+        printf("%s -> ", print_binary(i, hash->global_depth));
         // printf("  %04X -> ", i & (0xFFFFFFFF >> (32 - hash->global_depth)));
         print_bucket(hash->directories[i]);
     }
@@ -104,10 +108,10 @@ Rid_t* remove_record(Ext_Hash_t* hash, Record_t* record) {
 
     if(rid->slot >= 0){
         remove_record_from_bucket(record, hash->directories[rid->page]);
-        fprintf(output_file, "BUS:%lu\t<%d, %d>\n", record->data, rid->page, rid->slot);
+        fprintf(output_file, "BUS:%lu \t<%s, %d>\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot);
     }else{//slot nao encontrado
         printf("Slot nao encontrado \n");
-        fprintf(output_file, "BUS:%lu\t-1 - Não encontrado\n", record->data);
+        fprintf(output_file, "BUS:%lu \t-1 - Não encontrado\n", record->data);
         //return -1; nao precisa, pois o rid já é slot -1 do buscar
         }
     return rid;
@@ -139,7 +143,7 @@ Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {
         rid->slot = add_record_to_bucket(record, hash->directories[bucket_idx]);
     }
 
-    fprintf(output_file, "INC:%lu\t<%d, %d>\tLD = %d\n", record->data, rid->page, rid->slot, hash->directories[bucket_idx]->local_depth);
+    fprintf(output_file, "INC:%lu \t<%s, %d> \tLD = %d\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot, hash->directories[bucket_idx]->local_depth);
 
     return rid;
 }
@@ -150,9 +154,9 @@ Rid_t* search_record(Ext_Hash_t* hash, Record_t* record) {
     rid->page = hash_func(record, hash->global_depth);
     rid->slot = search_record_in_bucket(record, hash->directories[rid->page]);
     if(rid->slot == -1)
-        fprintf(output_file, "REM:%lu\t-1 - Nem achou, moh cringe\n", record->data);
+        fprintf(output_file, "REM:%lu \t-1 - Nem achou, moh cringe\n", record->data);
     else{
-        fprintf(output_file, "REM:%lu\t<%d, %d>\n", record->data, rid->page, rid->slot);
+        fprintf(output_file, "REM:%lu \t<%s, %d>\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot);
     }
     return rid;
 }
