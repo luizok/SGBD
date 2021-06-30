@@ -146,7 +146,10 @@ Rid_t* add_record(Ext_Hash_t* hash, Record_t* record) {
         rid->slot = add_record_to_bucket(record, hash->directories[bucket_idx]);
     }
 
-    fprintf(output_file, "INC:%lu \t<%s, %d> \tLD = %d\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot, hash->directories[bucket_idx]->local_depth);
+    if(rid->slot < 0)
+        fprintf(output_file, "INC:%lu -1 Bucket já está cheio mesmo duplicado :(\n", record->data);
+    else
+        fprintf(output_file, "INC:%lu \t<%s, %d> \tLD = %d\n", record->data, print_binary(rid->page, hash->global_depth), rid->slot, hash->directories[bucket_idx]->local_depth);
 
     return rid;
 }
