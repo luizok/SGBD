@@ -47,11 +47,12 @@ public class Record {
         
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("<Record>\n");
+        buffer.append("<Record ");
 
         for(String fieldName : this.fields.keySet())
-            buffer.append(String.format("\t %s\b value=%s>\n", this.fields.get(fieldName), this.values.get(fieldName)));
+            buffer.append(String.format("%s=%s ", fieldName, this.values.get(fieldName)));
 
+        buffer.append("\b>");
         return buffer.toString();
     }
 }
