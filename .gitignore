@@ -2,3 +2,4 @@
 *.dbpage
 *.bin
 .vscode/
+*.class
