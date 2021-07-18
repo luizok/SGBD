@@ -44,11 +44,12 @@ public class Record {
 
     public int compareTo(Record r, String fieldName) {
         
+        Class<?> fieldType = this.getFieldType(fieldName);
         Object field1 = this.getFieldValue(fieldName);
         Object field2 = r.getFieldValue(fieldName);
 
-        field1.compareTo(field2);
         // criar um mapa para cada classe de comparadores
+        return Comparator.compare(field1, field2, fieldType);
     }
 
     @Override

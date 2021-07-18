@@ -17,6 +17,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         Main.runTests();
+
     }
 
     public static void runTests() throws Exception {
@@ -64,6 +65,10 @@ public class Main {
         t.insert(r2);
         t.insert(r3);
 
+        Table tSorted = t.sortBy("idade");
+
         System.out.println(t);
+        System.out.println("\n");
+        System.out.println(tSorted);
     }
 }

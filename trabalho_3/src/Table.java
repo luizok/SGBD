@@ -41,8 +41,9 @@ public class Table {
 
     public String getName() { return this.name; }
     public List<Attribute> getSchema() { return this.schema; }
-    public void sortBy(String fieldName) {
+    public Table sortBy(String fieldName) {
 
+        Table sortedTable = new Table(this.getName(), this.getSchema());
         List<Record> recordsChunk = new ArrayList<Record>();
 
         for(Page p : this.pages)
@@ -51,9 +52,14 @@ public class Table {
         recordsChunk.sort(new Comparator<Record>(){
            public int compare(Record r1, Record r2) {
                 
-                return r1.compareTo(r2);
+                return r1.compareTo(r2, fieldName);
             }
         });
+
+        for(Record r : recordsChunk)
+            sortedTable.insert(r);
+
+        return sortedTable;
     }
 
     @Override
