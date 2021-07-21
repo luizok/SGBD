@@ -2,6 +2,9 @@ package trabalho_3.src;
 
 import java.io.InvalidClassException;
 import java.util.HashMap;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
 
 public class Record {
 
@@ -52,6 +55,16 @@ public class Record {
         return Comparator.compare(field1, field2, fieldType);
     }
 
+    public void readFile() throws FileNotFoundException{
+        Scanner scanner = new Scanner(new FileReader("/C:/Users/jevil/Downloads/data_Funcionario.txt")).useDelimiter("\\n");
+        int linhas = 0;
+        while (scanner.hasNext()) {
+            linhas++;
+            //scanner.next();
+            System.out.println( scanner.next() );
+        }
+        System.out.println("n. de linhas: " + linhas);
+    }
     @Override
     public String toString() {
         
