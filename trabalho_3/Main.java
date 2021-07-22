@@ -22,7 +22,7 @@ public class Main {
 
     public static void runMain() throws Exception {
         //                                          TABELA DE FUNCIONARIO
-        List<String> listFunc = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Funcionario.txt", 2);
+        List<String> listFunc = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Funcionario.txt", 7);
         //List<Record> listRecord = new ArrayList<Record>();
         List<String> list = new ArrayList<String>();
         list.add("id");
@@ -51,25 +51,25 @@ public class Main {
         System.out.println("funcTable: " + funcTable);
 
         //                                          TABELA DE VENDA
-        List<String> listVendas = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Venda.txt", 2);
+        List<String> listVendas = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Venda.txt", 7);
         //List<Record> listRecordVenda = new ArrayList<Record>();
         List<String> listSales = new ArrayList<String>();
-        listSales.add("id");
-        listSales.add("id");
+        listSales.add("idVenda");
+        listSales.add("idFunc");
         listSales.add("Nome");
         listSales.add("Quantidade");
         
         Table vendasTable = new Table("Vendas", new ArrayList<Attribute>(List.of(
-            new Attribute("id", Integer.class),
-            new Attribute("id", Integer.class),
+            new Attribute("idVenda", Integer.class),
+            new Attribute("idFunc", Integer.class),
             new Attribute("Nome", String.class),
             new Attribute("Quantidade", Integer.class)
         )));
 
         for(String row : listVendas){
             Record recordVenda = new Record(
-                                            new Attribute("id", Integer.class),
-                                            new Attribute("id", Integer.class),
+                                            new Attribute("idVenda", Integer.class),
+                                            new Attribute("idFunc", Integer.class),
                                             new Attribute("Nome", String.class),
                                             new Attribute("Quantidade", Integer.class)
                                 );
