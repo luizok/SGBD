@@ -8,10 +8,11 @@ import java.util.List;
 
 public class Table implements Iterator<Record> {
     
-    private static int nRecsPerPages = 5;
+    private static int nRecsPerPages = 16;
     private String name;
     private List<Attribute> schema;
     List<Page> pages = new ArrayList<Page>();
+    private int totalRecords = 0;
 
     private int currPageIdx = 0;
     private int currRecordIdx = 0; 
@@ -58,7 +59,21 @@ public class Table implements Iterator<Record> {
             this.pages.add(newPage);
         }
 
+        this.totalRecords++;
+
         return true;
+    }
+
+    public int getTotalRecords() {
+
+        return this.totalRecords;
+    }
+
+    public Record getRecord(int i) {
+
+        Page p = this.pages.get(i / Table.nRecsPerPages);
+
+        return p.get(i % p.getNRecords());
     }
 
     @Override
@@ -84,6 +99,11 @@ public class Table implements Iterator<Record> {
         this.currPageIdx += prevRecordIdx + 1 == this.pages.get(this.currPageIdx).size() ? 1 : 0;
 
         return rec;
+    }
+
+    public void resetIter() {
+        this.currPageIdx = 0;
+        this.currRecordIdx = 0;
     }
 
     public String getName() { return this.name; }
@@ -115,8 +135,8 @@ public class Table implements Iterator<Record> {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(String.format(
-            "<Table name=%s nPages=%s nRecsPerPages=%d>",
-            this.name, this.pages.size(), this.pages.get(0).getNRecords()
+            "<Table name=%s totalRecs=%d nPages=%s nRecsPerPages=%d>",
+            this.name, this.totalRecords, this.pages.size(), this.pages.get(0).getNRecords()
         ));
         
         int i = 0;

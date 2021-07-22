@@ -16,9 +16,40 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
+
         // Main.runTests();
+        // Main.joinTest();
         Main.runMain();
 
+    }
+
+    public static void joinTest() throws Exception {
+        List<Attribute> blueSchema = new ArrayList<Attribute>(List.of(
+            new Attribute("sid", Integer.class),
+            new Attribute("sname", String.class)
+        ));
+        Table blue = Table.buildFromFile("trabalho_3/src/tblBlue.txt", -1, "Blue", blueSchema);
+
+        List<Attribute> redSchema = new ArrayList<Attribute>(List.of(
+            new Attribute("sid_", Integer.class),
+            new Attribute("bid", Integer.class)
+        ));
+        Table red = Table.buildFromFile("trabalho_3/src/tblRed.txt", -1, "Red", redSchema);
+
+        System.out.println(blue);
+        System.out.println("\n");
+        System.out.println(red);
+        System.out.println("\n");
+
+        // for(int i=0; i < red.getTotalRecords(); i++) {
+        //     System.out.println("REC:" + red.getRecord(i));
+        // }
+
+        Table join = Joiner.sortMergeJoin(blue, red, "sid", "sid_");
+
+
+        System.out.println(join);
+        System.out.println("\n");
     }
 
     public static void runMain() throws Exception {
@@ -29,7 +60,7 @@ public class Main {
             new Attribute("Sobrenome", String.class),
             new Attribute("Idade", Integer.class)
         ));
-        Table funcTable = Table.buildFromFile("/home/luizok/Downloads/data_Funcionario.txt", 7, "Funcionario", funcSchema);
+        Table funcTable = Table.buildFromFile("/home/luizok/Downloads/data_Funcionario.txt", -1, "Funcionario", funcSchema);
 
         List<Attribute> vendasSchema = new ArrayList<Attribute>(List.of(
             new Attribute("idVenda", Integer.class),
@@ -37,23 +68,16 @@ public class Main {
             new Attribute("Nome", String.class),
             new Attribute("Quantidade", Integer.class)
         ));
-        Table vendasTable = Table.buildFromFile("/home/luizok/Downloads/data_Venda.txt", 7, "Vendas", vendasSchema);
+        Table vendasTable = Table.buildFromFile("/home/luizok/Downloads/data_Venda.txt", -1, "Vendas", vendasSchema);
 
         System.out.println(funcTable);
         System.out.println("\n");
         System.out.println(vendasTable);
 
+        Table joinedTable = Joiner.sortMergeJoin(funcTable, vendasTable, "id", "idFunc");
         System.out.println("--------------------------------------------");
-        // while(vendasTable.hasNext()) {
-        //     System.out.println("VENDA: " + vendasTable.next());
-        // }
-
-        Table sortedTblFunc = funcTable.sortBy("id");
-        Table sortedTblVenda = vendasTable.sortBy("idFunc");
-
-        System.out.println(sortedTblFunc);
-        System.out.println("\n");
-        System.out.println(sortedTblVenda);
+        System.out.println(joinedTable);
+        System.out.println("A tabela entrechecheda tem " + joinedTable.getTotalRecords() + " elementos");
     }
     
     public static void runTests() throws Exception {
