@@ -1,5 +1,6 @@
 package trabalho_3.src;
 
+import java.time.Instant;
 import java.util.Date;
 
 public class Comparator {
@@ -14,6 +15,20 @@ public class Comparator {
 
         else if(type.equals(Integer.class))
             return ((Integer) o1).compareTo((Integer) o2);
+
+        throw new UnsupportedOperationException();
+    }
+
+    public static Object fromString(String str, Class<?> type) throws UnsupportedOperationException {
+
+        if(type.equals(String.class))
+            return str;
+
+        else if(type.equals(Date.class))
+            return Instant.parse(str);
+
+        else if(type.equals(Integer.class))
+            return Integer.parseInt(str);
 
         throw new UnsupportedOperationException();
     }

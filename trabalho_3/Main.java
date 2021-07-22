@@ -16,13 +16,14 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
+        // Main.runTests();
         Main.runMain();
 
     }
 
     public static void runMain() throws Exception {
         //                                          TABELA DE FUNCIONARIO
-        List<String> listFunc = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Funcionario.txt", 7);
+        List<String> listFunc = FileHandler.readFile("/home/luizok/Downloads/data_Funcionario.txt", 7);
         //List<Record> listRecord = new ArrayList<Record>();
         List<String> list = new ArrayList<String>();
         list.add("id");
@@ -48,10 +49,8 @@ public class Main {
             funcTable.insert(recordFunc);
         }
 
-        System.out.println("funcTable: " + funcTable);
-
         //                                          TABELA DE VENDA
-        List<String> listVendas = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Venda.txt", 7);
+        List<String> listVendas = FileHandler.readFile("/home/luizok/Downloads/data_Venda.txt", 7);
         //List<Record> listRecordVenda = new ArrayList<Record>();
         List<String> listSales = new ArrayList<String>();
         listSales.add("idVenda");
@@ -77,7 +76,21 @@ public class Main {
             vendasTable.insert(recordVenda);
         }
 
-        System.out.println("vendasTable: " + vendasTable);
+        System.out.println(funcTable);
+        System.out.println("\n");
+        System.out.println(vendasTable);
+
+        System.out.println("--------------------------------------------");
+        // while(vendasTable.hasNext()) {
+        //     System.out.println("VENDA: " + vendasTable.next());
+        // }
+
+        Table sortedTblFunc = funcTable.sortBy("id");
+        Table sortedTblVenda = vendasTable.sortBy("idFunc");
+
+        System.out.println(sortedTblFunc);
+        System.out.println("\n");
+        System.out.println(sortedTblVenda);
     }
     
     public static void runTests() throws Exception {
@@ -131,5 +144,8 @@ public class Main {
         System.out.println("\n");
         System.out.println(tSorted);
 
+        while(t.hasNext()) {
+            System.out.println("R = " + t.next());
+        }
     }
 }

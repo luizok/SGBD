@@ -24,7 +24,7 @@ public class Record {
         String[] splits = row.split(",");
 
         for(int i=0; i < splits.length; i++)
-            this.values.put(fields.get(i), splits[i]);
+            this.values.put(fields.get(i), Comparator.fromString(splits[i], this.fields.get(fields.get(i)).getType()));
     }
 
     public void setField(String fieldName, Object value) throws

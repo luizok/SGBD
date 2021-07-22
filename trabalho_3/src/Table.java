@@ -5,12 +5,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-public class Table {
+public class Table implements Iterator<Record> {
     
-    private static int nRecsPerPages = 2;
+    private static int nRecsPerPages = 5;
     private String name;
     private List<Attribute> schema;
     List<Page> pages = new ArrayList<Page>();
+
+    private int currPageIdx = 0;
+    private int currRecordIdx = 0; 
 
     public Table(String name, List<Attribute> schema) {
         this.name = name;
@@ -37,6 +40,31 @@ public class Table {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean hasNext() {
+
+        try {
+            this.pages.get(currPageIdx).get(currRecordIdx);
+            return true;
+        } catch(IndexOutOfBoundsException e) {
+            this.currPageIdx = 0;
+            this.currRecordIdx = 0;
+            return false;
+        }
+    }
+
+    @Override
+    public Record next() {
+
+        Record rec = this.pages.get(currPageIdx).get(currRecordIdx);
+
+        int prevRecordIdx = this.currRecordIdx;
+        this.currRecordIdx = (this.currRecordIdx + 1) % this.pages.get(this.currPageIdx).size();
+        this.currPageIdx += prevRecordIdx + 1 == this.pages.get(this.currPageIdx).size() ? 1 : 0;
+
+        return rec;
     }
 
     public String getName() { return this.name; }
@@ -82,6 +110,7 @@ public class Table {
             for(Record r : p) {
                 buffer.append(String.format("\n\t\t%s", r));
             }
+            i++;
         }
 
 
