@@ -78,6 +78,7 @@ public class Main {
         System.out.println("--------------------------------------------");
         System.out.println(joinedTable);
         System.out.println("A tabela entrechecheda tem " + joinedTable.getTotalRecords() + " elementos");
+        joinedTable.toCSV("trabalho_3/joined.txt");
     }
     
     public static void runTests() throws Exception {

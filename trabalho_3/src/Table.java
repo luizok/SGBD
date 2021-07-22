@@ -1,6 +1,8 @@
 package trabalho_3.src;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -129,6 +131,26 @@ public class Table implements Iterator<Record> {
         return sortedTable;
     }
 
+    public void toCSV(String path) throws Exception {
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        StringBuffer buffer = new StringBuffer();
+
+        for(Page p : this.pages) {
+            for(Record r : p) {
+                for(Object val : r.getAllFieldValues())
+                    buffer.append(val.toString() + ",");
+                
+                    buffer.deleteCharAt(buffer.length()-1);
+                buffer.append("\r\n");
+            }
+        }
+
+        writer.write(buffer.toString());
+
+        writer.close();
+    }
+
     @Override
     public String toString() {
         
@@ -151,7 +173,6 @@ public class Table implements Iterator<Record> {
             }
             i++;
         }
-
 
         return buffer.toString();
     }

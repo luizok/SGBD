@@ -1,6 +1,8 @@
 package trabalho_3.src;
 
 import java.io.InvalidClassException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,6 +61,11 @@ public class Record {
 
         // criar um mapa para cada classe de comparadores
         return Comparator.compare(field1, field2, fieldType);
+    }
+
+    public Collection<Object> getAllFieldValues() {
+
+        return this.values.values(); 
     }
 
     @Override
