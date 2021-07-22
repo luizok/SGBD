@@ -16,10 +16,70 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        Main.runTests();
+        Main.runMain();
 
     }
 
+    public static void runMain() throws Exception {
+        //                                          TABELA DE FUNCIONARIO
+        List<String> listFunc = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Funcionario.txt", 2);
+        //List<Record> listRecord = new ArrayList<Record>();
+        List<String> list = new ArrayList<String>();
+        list.add("id");
+        list.add("Nome");
+        list.add("Sobrenome");
+        list.add("Idade");
+        
+        Table funcTable = new Table("Funcionarios", new ArrayList<Attribute>(List.of(
+            new Attribute("id", Integer.class),
+            new Attribute("Nome", String.class),
+            new Attribute("Sobrenome", String.class),
+            new Attribute("Idade", Integer.class)
+        )));
+
+        for(String row : listFunc){
+            Record recordFunc = new Record(
+                                            new Attribute("id", Integer.class),
+                                            new Attribute("Nome", String.class),
+                                            new Attribute("Sobrenome", String.class),
+                                            new Attribute("Idade", Integer.class)
+                                );
+            recordFunc.fromRow(row, list);
+            funcTable.insert(recordFunc);
+        }
+
+        System.out.println("funcTable: " + funcTable);
+
+        //                                          TABELA DE VENDA
+        List<String> listVendas = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Venda.txt", 2);
+        //List<Record> listRecordVenda = new ArrayList<Record>();
+        List<String> listSales = new ArrayList<String>();
+        listSales.add("id");
+        listSales.add("id");
+        listSales.add("Nome");
+        listSales.add("Quantidade");
+        
+        Table vendasTable = new Table("Vendas", new ArrayList<Attribute>(List.of(
+            new Attribute("id", Integer.class),
+            new Attribute("id", Integer.class),
+            new Attribute("Nome", String.class),
+            new Attribute("Quantidade", Integer.class)
+        )));
+
+        for(String row : listVendas){
+            Record recordVenda = new Record(
+                                            new Attribute("id", Integer.class),
+                                            new Attribute("id", Integer.class),
+                                            new Attribute("Nome", String.class),
+                                            new Attribute("Quantidade", Integer.class)
+                                );
+            recordVenda.fromRow(row, listSales);
+            vendasTable.insert(recordVenda);
+        }
+
+        System.out.println("vendasTable: " + vendasTable);
+    }
+    
     public static void runTests() throws Exception {
 
         Record r1 = new Record(
@@ -60,7 +120,7 @@ public class Main {
             new Attribute("idade", Integer.class),
             new Attribute("dataNasc", Date.class)
         )));
-
+        
         t.insert(r1);
         t.insert(r2);
         t.insert(r3);
@@ -71,7 +131,5 @@ public class Main {
         System.out.println("\n");
         System.out.println(tSorted);
 
-        List<String> listTeste = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Funcionario.txt", 2);
-        System.out.println("listTeste: " + listTeste);
     }
 }
