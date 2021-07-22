@@ -70,5 +70,8 @@ public class Main {
         System.out.println(t);
         System.out.println("\n");
         System.out.println(tSorted);
+
+        List<String> listTeste = FileHandler.readFile("/C:/Users/jevil/Downloads/data_Funcionario.txt", 2);
+        System.out.println("listTeste: " + listTeste);
     }
 }
