@@ -2,6 +2,8 @@ package trabalho_3.src;
 
 import java.io.InvalidClassException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -19,6 +21,14 @@ public class Record {
             this.fields.put(attr.getName(), attr);
             this.values.put(attr.getName(), null);
         }
+    }
+
+    public void fromRow(String row, List<String> fields) {
+
+        String[] splits = row.split(",");
+
+        for(int i=0; i < splits.length; i++)
+            this.values.put(fields.get(i), splits[i]);
     }
 
     public void setField(String fieldName, Object value) throws
