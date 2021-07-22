@@ -22,59 +22,22 @@ public class Main {
     }
 
     public static void runMain() throws Exception {
-        //                                          TABELA DE FUNCIONARIO
-        List<String> listFunc = FileHandler.readFile("/home/luizok/Downloads/data_Funcionario.txt", 7);
-        //List<Record> listRecord = new ArrayList<Record>();
-        List<String> list = new ArrayList<String>();
-        list.add("id");
-        list.add("Nome");
-        list.add("Sobrenome");
-        list.add("Idade");
-        
-        Table funcTable = new Table("Funcionarios", new ArrayList<Attribute>(List.of(
+
+        List<Attribute> funcSchema = new ArrayList<Attribute>(List.of(
             new Attribute("id", Integer.class),
             new Attribute("Nome", String.class),
             new Attribute("Sobrenome", String.class),
             new Attribute("Idade", Integer.class)
-        )));
+        ));
+        Table funcTable = Table.buildFromFile("/home/luizok/Downloads/data_Funcionario.txt", 7, "Funcionario", funcSchema);
 
-        for(String row : listFunc){
-            Record recordFunc = new Record(
-                                            new Attribute("id", Integer.class),
-                                            new Attribute("Nome", String.class),
-                                            new Attribute("Sobrenome", String.class),
-                                            new Attribute("Idade", Integer.class)
-                                );
-            recordFunc.fromRow(row, list);
-            funcTable.insert(recordFunc);
-        }
-
-        //                                          TABELA DE VENDA
-        List<String> listVendas = FileHandler.readFile("/home/luizok/Downloads/data_Venda.txt", 7);
-        //List<Record> listRecordVenda = new ArrayList<Record>();
-        List<String> listSales = new ArrayList<String>();
-        listSales.add("idVenda");
-        listSales.add("idFunc");
-        listSales.add("Nome");
-        listSales.add("Quantidade");
-        
-        Table vendasTable = new Table("Vendas", new ArrayList<Attribute>(List.of(
+        List<Attribute> vendasSchema = new ArrayList<Attribute>(List.of(
             new Attribute("idVenda", Integer.class),
             new Attribute("idFunc", Integer.class),
             new Attribute("Nome", String.class),
             new Attribute("Quantidade", Integer.class)
-        )));
-
-        for(String row : listVendas){
-            Record recordVenda = new Record(
-                                            new Attribute("idVenda", Integer.class),
-                                            new Attribute("idFunc", Integer.class),
-                                            new Attribute("Nome", String.class),
-                                            new Attribute("Quantidade", Integer.class)
-                                );
-            recordVenda.fromRow(row, listSales);
-            vendasTable.insert(recordVenda);
-        }
+        ));
+        Table vendasTable = Table.buildFromFile("/home/luizok/Downloads/data_Venda.txt", 7, "Vendas", vendasSchema);
 
         System.out.println(funcTable);
         System.out.println("\n");
@@ -95,23 +58,23 @@ public class Main {
     
     public static void runTests() throws Exception {
 
-        Record r1 = new Record(
+        Record r1 = new Record(List.of(
             new Attribute("nome", String.class),
             new Attribute("idade", Integer.class),
             new Attribute("dataNasc", Date.class)
-        );
+        ));
 
-        Record r2 = new Record(
+        Record r2 = new Record(List.of(
             new Attribute("nome", String.class),
             new Attribute("idade", Integer.class),
             new Attribute("dataNasc", Date.class)
-        );
+        ));
             
-        Record r3 = new Record(
+        Record r3 = new Record(List.of(
             new Attribute("nome", String.class),
             new Attribute("idade", Integer.class),
             new Attribute("dataNasc", Date.class)
-        );
+        ));
 
         r1.setField("nome", "Luiz Felipe");
         r1.setField("idade", 23);

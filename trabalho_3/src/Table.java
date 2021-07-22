@@ -1,5 +1,6 @@
 package trabalho_3.src;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -14,6 +15,24 @@ public class Table implements Iterator<Record> {
 
     private int currPageIdx = 0;
     private int currRecordIdx = 0; 
+
+    public static Table buildFromFile(String path, int nRows, String tblName, List<Attribute> schema) throws FileNotFoundException {
+
+        List<String> rows = FileHandler.readFile(path, nRows);
+        Table t = new Table(tblName, schema);
+
+        List<String> fieldOrder = new ArrayList<String>();
+        for(Attribute attr : schema)
+            fieldOrder.add(attr.getName());
+
+        for(String row : rows) {
+            Record record = new Record(schema);
+            record.fromRow(row, fieldOrder);
+            t.insert(record);
+        }
+
+        return t;
+    }
 
     public Table(String name, List<Attribute> schema) {
         this.name = name;

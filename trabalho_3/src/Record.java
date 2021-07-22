@@ -11,7 +11,7 @@ public class Record {
     HashMap<String, Attribute> fields = new HashMap<String, Attribute>();
     HashMap<String, Object> values = new HashMap<String, Object>();
 
-    public Record(Attribute... attributes) {
+    public Record(List<Attribute> attributes) {
 
         for(Attribute attr : attributes) {
             this.fields.put(attr.getName(), attr);
