@@ -77,10 +77,10 @@ public class Main {
         Table joinedTable = Joiner.sortMergeJoin(funcTable, vendasTable, "id", "idFunc");
         System.out.println("--------------------------------------------");
         System.out.println(joinedTable);
-        System.out.println("A tabela entrechecheda tem " + joinedTable.getTotalRecords() + " elementos");
+        System.out.println("A tabela entrechechada tem " + joinedTable.getTotalRecords() + " elementos");
         joinedTable.toCSV("trabalho_3/joined.txt");
     }
-    
+
     public static void runTests() throws Exception {
 
         Record r1 = new Record(List.of(

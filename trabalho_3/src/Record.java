@@ -1,7 +1,6 @@
 package trabalho_3.src;
 
 import java.io.InvalidClassException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
