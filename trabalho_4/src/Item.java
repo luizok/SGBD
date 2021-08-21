@@ -19,6 +19,12 @@ public class Item {
     }
 
     @Override
+    public int hashCode() {
+        
+        return this.val.hashCode();
+    }
+
+    @Override
     public String toString() {
 
         return this.val;
