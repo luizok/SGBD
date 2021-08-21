@@ -14,4 +14,14 @@ public class LockTableEntry {
         this.lockType = lockType;
         this.trId = trId;
     }
+
+    @Override
+    public String toString() {
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(String.format("<Item=%s, lock=%s, trId=%d>", this.it, this.lockType, this.trId));
+
+        return builder.toString();
+    }
 }

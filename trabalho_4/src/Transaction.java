@@ -41,4 +41,14 @@ public class Transaction {
     public void setCurrentState(StateEnum currentState) {
         this.currentState = currentState;
     }
+
+    @Override
+    public String toString() {
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(String.format("<trId=%d, time=%s, state=%s>", this.id, this.ts, this.currentState));
+
+        return builder.toString();
+    }
 }
