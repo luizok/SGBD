@@ -1,16 +1,24 @@
 package trabalho_4.src.entries;
 
-import trabalho_4.src.Item;
+import trabalho_4.src.Transaction;
 import trabalho_4.src.enums.LockEnum;
 
 public class WaitQueueEntry {
     
-    private Item it;
+    private Transaction transaction;
     private LockEnum lockType;
 
-    public WaitQueueEntry(Item it, LockEnum lockType) {
-        this.it = it;
+    public WaitQueueEntry(Transaction t, LockEnum lockType) {
+        this.transaction = t;
         this.lockType = lockType;
+    }
+
+    public LockEnum getLockType() {
+        return lockType;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
     }
 
     @Override
@@ -18,7 +26,7 @@ public class WaitQueueEntry {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append(String.format("<Item=%s, lock=%s>", this.it, this.lockType));
+        builder.append(String.format("<trId=%d, lock=%s>", this.transaction.getId(), this.lockType));
 
         return builder.toString();
     }

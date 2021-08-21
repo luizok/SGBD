@@ -15,6 +15,18 @@ public class LockTableEntry {
         this.trId = trId;
     }
 
+    public Item getItem() {
+        return it;
+    }
+
+    public LockEnum getLockType() {
+        return lockType;
+    }
+
+    public int getTrId() {
+        return trId;
+    }
+
     @Override
     public String toString() {
 

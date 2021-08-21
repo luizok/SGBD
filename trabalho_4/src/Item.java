@@ -8,6 +8,16 @@ public class Item {
         this.val = val;
     }
 
+    public String getValue() {
+        return val;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        
+        return this.val.equals(((Item) obj).getValue());
+    }
+
     @Override
     public String toString() {
 
