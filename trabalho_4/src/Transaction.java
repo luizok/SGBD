@@ -43,6 +43,18 @@ public class Transaction {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        
+        return this.id == ((Transaction) obj).getId();
+    }
+
+    @Override
+    public int hashCode() {
+        
+        return this.id;
+    }
+
+    @Override
     public String toString() {
 
         StringBuilder builder = new StringBuilder();

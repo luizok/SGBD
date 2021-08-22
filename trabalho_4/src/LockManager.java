@@ -17,7 +17,7 @@ public class LockManager {
     
     List<LockTableEntry> lockTable = new ArrayList<LockTableEntry>();
     Map<Item, List<WaitQueueEntry>> waitQueues = new HashMap<Item, List<WaitQueueEntry>>();
-
+    TrManager trManager = new TrManager();
 
     private void updateWaitQueue(Transaction tr, Item d, LockEnum lockType) {
 
@@ -30,26 +30,54 @@ public class LockManager {
     private boolean canLock(Transaction tr, Item d, LockEnum lockType) {
             
         for(LockTableEntry lte : this.lockTable)
-            if(lte.getItem().equals(d) && (lte.getLockType() == LockEnum.EXCLUSIVE))
+            if(lte.getItem().equals(d) && (lockType == LockEnum.EXCLUSIVE || lte.getLockType() == LockEnum.EXCLUSIVE))
                 return false;
 
         return true;
+    }
+
+    public void newTransaction(Transaction t) {
+
+        this.trManager.addNode(t);
+    }
+
+    private Transaction getPrecedingTransaction(Transaction tr, Item d) {
+
+        for(LockTableEntry lte : this.lockTable)
+            if(lte.getItem().equals(d))
+                return new Transaction(lte.getTrId());
+
+        return null;
+    }
+
+    private void updateDepencyGraph(Transaction tr, Item d) {
+
+        if((tr == null) || (d == null))
+            return;
+
+        Transaction pt = this.getPrecedingTransaction(tr, d);
+        if(pt != null)
+            this.trManager.addEdge(pt, tr);
     }
 
     public void lockShared(Transaction tr, Item d) { // LS(Tr, D)
 
         if(this.canLock(tr, d, LockEnum.SHARED)) {
             this.lockTable.add(new LockTableEntry(d, LockEnum.SHARED, tr.getId()));
-        } else
+        } else {
+            this.updateDepencyGraph(tr, d);
             this.updateWaitQueue(tr, d, LockEnum.SHARED);
+        }
     }
 
     public void lockExclusive(Transaction tr, Item d) { // LX(Tr, D)
 
         if(this.canLock(tr, d, LockEnum.EXCLUSIVE))
             this.lockTable.add(new LockTableEntry(d, LockEnum.EXCLUSIVE, tr.getId()));
-        else
+        else {
+            this.updateDepencyGraph(tr, d);
             this.updateWaitQueue(tr, d, LockEnum.EXCLUSIVE);
+        }
     }
 
     private List<LockTableEntry> removeRelatedEntries(int transactionId) {
@@ -91,6 +119,8 @@ public class LockManager {
 
     public void unlock(Transaction tr) { // U(Tr, D)
 
+        this.trManager.updateState(tr);
+
         List<LockTableEntry> removedElements = this.removeRelatedEntries(tr.getId());
         Set<Item> items = new HashSet<Item>();
 
@@ -117,6 +147,8 @@ public class LockManager {
     public String toString() {
 
         StringBuilder builder = new StringBuilder();
+
+        builder.append(this.trManager.toString());
         builder.append("Lock Table\n");
         for(LockTableEntry lte : this.lockTable)
             builder.append(lte.toString() + "\n");
