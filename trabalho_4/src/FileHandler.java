@@ -5,13 +5,21 @@ import java.util.Scanner;
 
 public class FileHandler {
     
-    public static String readFile(String path) throws FileNotFoundException {
+    public static String readFile(String path, int line) throws FileNotFoundException {
         Scanner scanner = new Scanner(new FileReader(path)).useDelimiter("\\n");
 
         StringBuilder builder = new StringBuilder();
         
-        while (scanner.hasNext())
-            builder.append(scanner.next());
+        int i = 0;
+        while (scanner.hasNext()) {
+            if(i == line) {
+                builder.append(scanner.next());
+                break;
+            }
+
+            scanner.next();
+            i++;
+        }
 
         scanner.close();
         return builder.toString();
